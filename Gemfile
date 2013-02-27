@@ -1,5 +1,8 @@
 source 'https://rubygems.org'
 
+gem "sequel"
+gem "pg"
+
 # Specify your gem's dependencies in traffic_spy.gemspec
 gemspec
 

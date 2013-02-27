@@ -5,7 +5,7 @@ require 'traffic_spy/version'
 
 Gem::Specification.new do |gem|
   gem.name          = "traffic_spy"
-  gem.version       = 0.0.1
+  gem.version       = TrafficSpy::VERSION
   gem.authors       = ["Geoffrey Schorkopf", "Bradley Sheehan"]
   gem.email         = ["gschorkopf@gmail.com", "bradpsheehan@gmail.com"]
   gem.description   = %q{Traffic Spy is a simple web analytics tool. Post an app name and send payloads to view cool data.}
