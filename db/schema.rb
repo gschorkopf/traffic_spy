@@ -1,5 +1,3 @@
-require 'sequel'
-
 module TrafficSpy
   class Schema
     # puts "Creating Table X"

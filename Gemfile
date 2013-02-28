@@ -5,6 +5,7 @@ gem "sequel"
 gem "pg"
 gem "sinatra"
 gem "shotgun"
+gem "sqlite3"
 
 # Specify your gem's dependencies in traffic_spy.gemspec
 gemspec

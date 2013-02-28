@@ -1,7 +1,4 @@
-require "traffic_spy/version"
-require "sequel"
-require "pg"
-require "sinatra"
+Bundler.require
 
 module TrafficSpy
   class TrafficSpy

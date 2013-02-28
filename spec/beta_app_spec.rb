@@ -1,4 +1,4 @@
-require_relative './lib/beta_app.rb'
+require_relative './lib/beta_app'
 require 'sinatra'
 
 set :environment, :test
