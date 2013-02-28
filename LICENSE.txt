@@ -1,4 +1,4 @@
-Copyright (c) 2013 Franklin Webber
+Copyright (c) 2013 Bradley Sheehan & Geoffrey Schorkopf
 
 MIT License
 
