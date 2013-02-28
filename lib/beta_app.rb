@@ -1,13 +1,13 @@
-# require 'sinatra'
+require 'sinatra'
 
-# module TrafficSpy
-#   class Application
+module TrafficSpy
+  class Application
 
-#     POST '/sources' do
-#       if params[:rooturl].nil?
-#         status 400
-#         {'/'message'/'}
-#     end
+    POST '/sources' do
+      if params[:rootUrl].nil?
+        status 400
+        {'/'message'/'}
+    end
 
-#   end
-# end
+  end
+end

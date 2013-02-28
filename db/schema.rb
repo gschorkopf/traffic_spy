@@ -5,23 +5,22 @@ module TrafficSpy
     # puts "Creating Table X"
     # raise "No table created" unless DB.table_exists? "x"
     # puts "Creating Table Y"
-    DB = Sequel.sqlite #temp
+    DB = Sequel.sqlite
 
     DB.create_table :sources do
       primary_key :id
       String      :identifier
       String      :rooturl
     end
-    ###
 
-    DB.create_table :traffics do 
+    DB.create_table :traffics do
       primary_key :id
-      String      :url          :size=>255
+      String      :url
       DateTime    :requestedAt
       Integer     :respondedIn
       String      :referredBy
       String      :requestType
-      # params    :???
+      String      :parameters
       foreign_key :event_id
       String      :userAgent
       String      :resolutionWidth

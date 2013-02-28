@@ -3,6 +3,8 @@ source 'https://rubygems.org'
 gem 'rake'
 gem "sequel"
 gem "pg"
+gem "sinatra"
+gem "shotgun"
 
 # Specify your gem's dependencies in traffic_spy.gemspec
 gemspec
