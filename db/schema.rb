@@ -2,26 +2,21 @@ require 'sequel'
 
 module TrafficSpy
   class Schema
-    # puts "Creating Table X"
-    # raise "No table created" unless DB.table_exists? "x"
-    # puts "Creating Table Y"
-    DB = Sequel.sqlite #temp
+    DB = Sequel.sqlite
 
     DB.create_table :sources do
       primary_key :id
       String      :identifier
       String      :rooturl
     end
-    ###
 
     DB.create_table :traffics do 
       primary_key :id
-      String      :url          :size=>255
+      String      :url          
       DateTime    :requestedAt
       Integer     :respondedIn
       String      :referredBy
       String      :requestType
-      # params    :???
       foreign_key :event_id
       String      :userAgent
       String      :resolutionWidth
@@ -41,23 +36,30 @@ module TrafficSpy
       foreign_key :event_id
     end
 
-    dataset = DB.from(:traffics)
-    payload = {
-        "url":"http://jumpstartlab.com/blog",
-        "requestedAt":"2013-02-16 21:38:28 -0700",
-        "respondedIn":37,
-        "referredBy":"http://jumpstartlab.com",
-        "requestType":"GET",
-        "parameters":[],
-        "eventName": "socialLogin",
-        "userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17",
-        "resolutionWidth":"1920",
-        "resolutionHeight":"1280",
-        "ip":"63.29.38.211" 
+    traffics_dataset = DB.from(:traffics)
+    traffics_payload = {
+        url:"http://jumpstartlab.com/blog",
+        requestedAt:"2013-02-16 21:38:28 -0700",
+        respondedIn:37,
+        referredBy:"http://jumpstartlab.com",
+        requestType:"GET",
+        event_id:1,
+        userAgent:"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17",
+        resolutionWidth:"1920",
+        resolutionHeight:"1280",
+        ip:"63.29.38.211" 
         }
-    dataset.insert(payload)
+    traffics_dataset.insert(traffics_payload)
 
+    events_dataset = DB.from(:events)
+    events_payload = {
+        name:"socialLogin",
+        campaign_id:12345
+        }
+    events_dataset.insert(events_payload)
 
+    joined_dataset = events_dataset.join(:traffics, :event_id=>:id)
+    puts joined_dataset.to_a
 
   end
 end
