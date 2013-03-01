@@ -1,3 +1,6 @@
+require 'sequel'
+require 'sqlite3'
+
 module TrafficSpy
   class Client
     attr_accessor :id, :identifier, :rooturl
@@ -20,12 +23,29 @@ module TrafficSpy
       end
     end
 
+    def missing?
+      if self.identifier.nil? || self.rooturl.nil?
+        true
+      else
+        false
+      end 
+    end
+
+    def exist?
+      # if self.identifier == data.select(:identifier).find("Amazon")
+        true
+      # end
+    end
+
+    def self.data
+      database.from(:identifiers)
+    end
+
     def save
-      true
-      # database.insert(
-        # identifier: identifier,
-        # rooturl: rooturl
-        # )
+      Client.data.insert(
+        identifier: identifier,
+        rooturl: rooturl
+        )
     end
 
   end
