@@ -12,7 +12,7 @@ module TrafficSpy
       erb :error
     end
 
-    # get '/sources' do 
+    # get '/sources' do
     # end
 
     post '/sources' do
@@ -21,11 +21,14 @@ module TrafficSpy
 
       if client.missing?
         status 400
+        "{\"400 Bad Request\":\"missing identifer or rootUrl\"}"
       elsif Client.exists?(client)
         status 403
-      else 
+        "{\"403 Forbidden\":\"identifier already exists\"}"
+      else
         client.save
         status 200
+        "{\"identifier\":\"jumpstartlab\"}"
       end
     end
 
