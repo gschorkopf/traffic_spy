@@ -31,10 +31,8 @@ module TrafficSpy
       end 
     end
 
-    def exist?
-      # if self.identifier == data.select(:identifier).find("Amazon")
-        true
-      # end
+    def self.exists?
+      false
     end
 
     def self.data
