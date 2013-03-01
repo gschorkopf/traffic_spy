@@ -11,6 +11,7 @@ group :development do
   gem 'sinatra'
   gem 'sequel'
   gem 'sqlite3'
+  gem 'json'
 end
 
 group :evaluations do

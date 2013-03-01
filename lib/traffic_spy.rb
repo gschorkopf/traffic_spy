@@ -2,6 +2,9 @@ Bundler.require
 
 require 'sinatra'
 require 'sinatra/base'
+require 'sequel'
+require 'sqlite3'
+require 'json'
 require './lib/traffic_spy/models/client'
 require './lib/traffic_spy/models/payload'
 
@@ -33,6 +36,7 @@ module TrafficSpy
     end
 
     post '/sources/:identifier/data' do
+      # payload = JSON.parse(params["payload"])
       # client_id = FIND ID associated with params[:identifier]
 
       # payload = Payload.new()
@@ -41,7 +45,7 @@ module TrafficSpy
       #   status 400
       # elsif payload has already been received
       #   status 403
-      # else 
+      # else
       #   status 200
       # end
     end

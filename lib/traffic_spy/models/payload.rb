@@ -1,9 +1,6 @@
-require 'sequel'
-require 'sqlite3'
-
 module TrafficSpy
   class Payload
-    attr_accessor :id,          :client_id,   :event_id,      
+    attr_accessor :id,          :client_id,   :event_id,
                   :url,         :requestedAt,
                   :respondedIn, :referredBy,  :requestType,
                   :userAgent,   :resolutionWidth,

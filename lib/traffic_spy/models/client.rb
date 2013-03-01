@@ -1,6 +1,3 @@
-require 'sequel'
-require 'sqlite3'
-
 module TrafficSpy
   class Client
     attr_accessor :id, :identifier, :rooturl
