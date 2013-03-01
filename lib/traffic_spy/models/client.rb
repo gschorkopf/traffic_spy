@@ -12,7 +12,7 @@ module TrafficSpy
     end
 
     def self.database
-      @database ||= Sequel.sqlite('./db/client_data.sqlite3')
+      @database ||= Sequel.sqlite('./db/database.sqlite3')
     end
 
     def self.create_table

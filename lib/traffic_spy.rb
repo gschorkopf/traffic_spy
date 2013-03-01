@@ -3,6 +3,7 @@ Bundler.require
 require 'sinatra'
 require 'sinatra/base'
 require './lib/traffic_spy/models/client'
+require './lib/traffic_spy/models/payload'
 
 module TrafficSpy
   class Server < Sinatra::Base
