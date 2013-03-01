@@ -20,11 +20,11 @@ module TrafficSpy
 
       if client.missing?
         status 400
-      # elsif Client.exists?(client)
-      #   status 403
-      else
-        status 200
+      elsif Client.exists?(client)
+        status 403
+      else 
         client.save
+        status 200
       end
     end
 
