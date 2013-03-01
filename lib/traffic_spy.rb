@@ -11,16 +11,19 @@ module TrafficSpy
       erb :error
     end
 
+    # get '/sources' do
+    # end
+
     post '/sources' do
-      # client will submit a post to http://ourapplication:port/sources
-      client = Client.new(:identifier => params["identifier"],
-                          :rooturl => params["rootUrl"])
+      client = Client.new(identifier: params["identifier"],
+                          rooturl: params["rootUrl"])
 
       if client.missing?
         status 400
-      # elsif Client.exists?(params[:identifier])
-      #   status 403
-      else client.save
+      elsif Client.exists?(client)
+        status 403
+      else
+        client.save
         status 200
       end
     end
