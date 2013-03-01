@@ -1,14 +1,11 @@
-require 'sequel'
-require 'sqlite3'
-
 module TrafficSpy
   class Client
-    attr_accessor :id, :identifier, :rooturl
+    attr_accessor :id, :identifier, :root_url
 
     def initialize(hash)
       @id =         hash[:id]
       @identifier = hash[:identifier]
-      @rooturl =    hash[:rooturl]
+      @rooturl =    hash[:root_url]
     end
 
     def self.database
@@ -23,27 +20,19 @@ module TrafficSpy
       end
     end
 
-    def missing?
-      if self.identifier.nil? || self.rooturl.nil?
-        true
-      else
-        false
-      end
-    end
-
-    def self.exists?
-      false
-    end
-
-    def self.data
-      database.from(:identifiers)
-    end
-
     def save
-      Client.data.insert(
+      database.insert(
         identifier: identifier,
         rooturl: rooturl
         )
+    end
+
+    def missing?
+      
+    end
+
+    def self.exists?(params[:identifier])
+      
     end
 
   end

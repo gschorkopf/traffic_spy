@@ -18,9 +18,9 @@ module TrafficSpy
 
       if client.missing?
         status 400
-      elsif Client.exist?(params[:identifier])
-        status 403
-      elsif client.save
+      # elsif Client.exists?(params[:identifier])
+      #   status 403
+      else client.save
         status 200
       end
     end
