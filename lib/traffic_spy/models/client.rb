@@ -44,8 +44,7 @@ module TrafficSpy
     def save
       Client.data.insert(
         identifier: identifier,
-        rooturl: rooturl
-        )
+        rooturl: rooturl)
     end
 
   end

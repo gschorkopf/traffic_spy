@@ -20,11 +20,14 @@ module TrafficSpy
 
       if client.missing?
         status 400
+        "{\"400 Bad Request\":\"missing identifer or rootUrl\"}"
       elsif Client.exists?(client)
         status 403
+        "{\"403 Forbidden\":\"identifier already exists\"}"
       else
         client.save
         status 200
+        "{\"identifier\":\"jumpstartlab\"}"
       end
     end
 
