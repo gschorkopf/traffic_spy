@@ -2,9 +2,9 @@ module TrafficSpy
   class Payloads
     DB = Sequel.sqlite
 
-    DB.create_table :payloads do 
+    DB.create_table :payloads do
       primary_key :id
-      String      :url          
+      String      :url
       DateTime    :requestedAt
       Integer     :respondedIn
       String      :referredBy

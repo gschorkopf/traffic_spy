@@ -14,13 +14,14 @@ module TrafficSpy
     post '/sources' do
       # client will submit a post to http://ourapplication:port/sources
       client = Client.new(:identifier => params["identifier"],
-                          :rooturl => params["rooturl"])
-      # Send user descriptive error messages if param(s) is missing or if
-      # if param(s) are missing then redirect to error message
-      if client.save
-        status 200
-      else
+                          :rooturl => params["rootUrl"])
+
+      if client.missing?
         status 400
+      elsif Client.exist?(params[:identifier])
+        status 403
+      elsif client.save
+        status 200
       end
     end
 
