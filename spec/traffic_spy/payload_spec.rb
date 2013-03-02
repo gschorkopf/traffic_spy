@@ -19,11 +19,13 @@ describe TrafficSpy::Payload do
       resolutionHeight:"1280",
       ip:"63.29.38.211" 
       )
+    @empty_payload = app.new({})
   end
 
   after do
     TrafficSpy::Client.database.drop_table(:payloads)
     @payload = nil
+    @empty_payload = nil
   end
 
   describe "initialize stores variables" do
@@ -47,11 +49,32 @@ describe TrafficSpy::Payload do
     end
   end
 
-  describe ".commit" do
+  describe "#commit" do
     it "inserts the current payload into the payloads table" do
       @payload.commit
       expect(app.data.where(id: 1).to_a.count).to eq 1
       expect(app.data.where(id: 1).to_a[0][:resolutionWidth]).to eq "1920"
+    end
+  end
+
+  describe "#empty?" do
+    it "returns true if payload is an empty hash" do
+      expect(@empty_payload.empty?).to eq true
+    end
+
+    it "return false if payload is a full hash" do
+      expect(@payload.empty?).to eq false
+    end
+  end
+
+  describe ".exists?" do
+    it "returns true if payload exists in :payloads" do
+      @payload.commit
+      expect(app.exists?(@payload)).to eq true
+    end
+      
+    it "return false if the payload does not exist in :payloads" do
+      expect(app.exists?(@empty_payload)).to eq false
     end
   end
 
