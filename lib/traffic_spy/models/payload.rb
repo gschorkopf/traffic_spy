@@ -3,33 +3,33 @@ module TrafficSpy
     attr_accessor :id,          :client_id,   :event_id,
                   :url,         :requestedAt,
                   :respondedIn, :referredBy,  :requestType,
-                  :useragent_id,:resolutionWidth,
-                  :resolutionHeight,  :ip
+                  :userAgent,   :resolutionWidth,
+                  :resolutionHeight,  :ip, :status
 
-    def initialize(hash = {referredBy: "no one!"})
-      unless hash == {}
-        @id              = hash[:id]
-        @client_id       = hash[:client_id]
-        @event_id        = hash[:event_id]
-        @useragent_id    = hash[:useragent_id]
-        @url             = hash[:url]
-        @requestedAt     = hash[:requestedAt]
-        @respondedIn     = hash[:respondedIn]
-        @referredBy      = hash[:referredBy]
-        @requestType     = hash[:requestType]
-        @resolutionWidth = hash[:resolutionWidth]
-        @resolutionHeight= hash[:resolutionHeight]
-        @ip              = hash[:ip]
+    def initialize(hash = {}, client_id = nil)
+      if hash == {}
+        @status = :empty
+      else
+        @client_id       = client_id
+        # @event_id        = Event.find_event_id(stuff)
+        @userAgent       = hash["userAgent"]
+        @url             = hash["url"]
+        @requestedAt     = hash["requestedAt"]
+        @respondedIn     = hash["respondedIn"]
+        @referredBy      = hash["referredBy"]
+        @requestType     = hash["requestType"]
+        @resolutionWidth = hash["resolutionWidth"]
+        @resolutionHeight= hash["resolutionHeight"]
+        @ip              = hash["ip"]
       end
     end
 
     def empty?
-      self.referredBy == "no one!"
+      status == :empty
     end
 
     def self.exists?(payload)
       Payload.data.where(url: payload.url).where(requestedAt: payload.requestedAt).count > 0
-      # Iterate through all available attributes
     end
 
     def self.data
@@ -47,9 +47,7 @@ module TrafficSpy
         foreign_key :client_id
         foreign_key :event_id
         # "eventName": "socialLogin" Connect to event.rb
-        foreign_key :useragent_id
-        # "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17"
-        # Connect to user_agent.rb
+        String      :userAgent
         String      :url
         DateTime    :requestedAt
         Integer     :respondedIn
@@ -58,7 +56,6 @@ module TrafficSpy
         String      :resolutionWidth
         String      :resolutionHeight
         String      :ip
-        # Parameters? WHAT'S UP WIT DATTT
       end
     end
 
@@ -67,7 +64,7 @@ module TrafficSpy
         id: id,
         client_id: client_id,
         event_id: event_id,
-        useragent_id: useragent_id,
+        useragent: userAgent,
         url: url,
         requestedAt: requestedAt,
         respondedIn: respondedIn,
@@ -77,6 +74,24 @@ module TrafficSpy
         ip: ip        
         )
     end
+
+    def self.find_all_by_client_id(client_id)
+      data.where(client_id: client_id)
+    end
+
+    def self.url_sorter
+      results_hash = {}
+      data.order(Sequel.desc(:url))
+    end
+
+    # def self.order_urls(results)
+    #   results_hash = Hash.new(0)
+    #   results.collect {|r| r[:url]}.each do |r|
+    #     results_hash[r] += 1
+    #   end
+    #   Hash[results_hash.sort_by {|key, value| value}.reverse]
+    # end
+    # results = payload_class.find_all_by_identifier_id(klient.id)
 
   end
 end
