@@ -61,7 +61,7 @@ module TrafficSpy
         userAgent: userAgent,
         resolutionWidth: resolutionWidth,
         resolutionHeight: resolutionHeight,
-        ip: ip        
+        ip: ip
         )
     end
 

@@ -17,7 +17,7 @@ describe TrafficSpy::Payload do
       userAgent:"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17",
       resolutionWidth:"1920",
       resolutionHeight:"1280",
-      ip:"63.29.38.211" 
+      ip:"63.29.38.211"
       )
   end
 
@@ -36,7 +36,7 @@ describe TrafficSpy::Payload do
       expect(@payload.userAgent).to eq "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17"
       expect(@payload.resolutionWidth).to eq "1920"
       expect(@payload.resolutionHeight).to eq "1280"
-      expect(@payload.ip).to eq "63.29.38.211" 
+      expect(@payload.ip).to eq "63.29.38.211"
     end
   end
 

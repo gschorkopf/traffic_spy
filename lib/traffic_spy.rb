@@ -36,18 +36,18 @@ module TrafficSpy
     end
 
     post '/sources/:identifier/data' do
-      # payload = JSON.parse(params["payload"])
-      # client_id = FIND ID associated with params[:identifier]
 
-      # payload = Payload.new()
+      payload = JSON.parse(params["payload"])
 
-      # if payload is missing
-      #   status 400
-      # elsif payload has already been received
-      #   status 403
-      # else
-      #   status 200
-      # end
+      client_id = FIND ID associated with params[:identifier]
+      
+      if payload is missing
+        status 400
+      elsif payload has already been received
+        status 403
+      else
+        status 200
+      end
     end
 
   end
