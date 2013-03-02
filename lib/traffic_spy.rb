@@ -7,6 +7,7 @@ require 'sqlite3'
 require 'json'
 require './lib/traffic_spy/models/client'
 require './lib/traffic_spy/models/payload'
+# require 'digest'
 
 module TrafficSpy
   class Server < Sinatra::Base
@@ -37,8 +38,10 @@ module TrafficSpy
 
     post '/sources/:identifier/data' do
 
+
       client_id = Client.data.where(identifier: params[:identifier]).to_a.first[:id].inspect
 
+      # MD5 stuff here
       hash = JSON.parse(params["payload"])
       payload = Payload.new(url: hash["url"],
                           client_id: client_id.to_i,
