@@ -37,17 +37,24 @@ module TrafficSpy
 
     post '/sources/:identifier/data' do
 
-      payload = JSON.parse(params["payload"])
+      client_id = Client.data.where(identifier: params[:identifier]).to_a.first[:id].inspect
 
-      client_id = FIND ID associated with params[:identifier]
-      
-      if payload is missing
+      hash = JSON.parse(params["payload"])
+      payload = Payload.new(url: hash["url"],
+                          client_id: client_id.to_i,
+                          requestedAt: hash["requestedAt"])
+
+      if payload.empty?
         status 400
-      elsif payload has already been received
+      elsif Payload.exists?(payload)
         status 403
       else
+        payload.commit
         status 200
       end
+
+      # Entry looks like:
+      # curl -i -d 'payload={"url":"http://jumpstartlab.com/blog","requestedAt":"2013-02-16 21:38:28 -0700"}'  http://localhost:9393/sources/jumpstartlab/data
     end
 
   end

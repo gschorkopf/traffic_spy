@@ -6,7 +6,7 @@ module TrafficSpy
                   :userAgent,   :resolutionWidth,
                   :resolutionHeight,  :ip
 
-    def initialize(hash)
+    def initialize(hash = {referredBy: "no one!"})
       @id              = hash[:id]
       @client_id       = hash[:client_id]
       @event_id        = hash[:event_id]
@@ -19,6 +19,15 @@ module TrafficSpy
       @resolutionWidth = hash[:resolutionWidth]
       @resolutionHeight= hash[:resolutionHeight]
       @ip              = hash[:ip]
+    end
+
+    def empty?
+      self.referredBy == "no one!"
+    end
+
+    def self.exists?(payload)
+      Payload.data.where(client_id: payload.client_id).where(event_id: payload.event_id).count > 0
+      # Iterate through all available attributes
     end
 
     def self.data
@@ -45,7 +54,7 @@ module TrafficSpy
         String      :resolutionWidth
         String      :resolutionHeight
         String      :ip
-        # Parameters? WHAT'S UP WIT DAT
+        # Parameters? WHAT'S UP WIT DATTT
       end
     end
 

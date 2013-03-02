@@ -2,7 +2,7 @@ module TrafficSpy
   class Client
     attr_accessor :id, :identifier, :rooturl
 
-    def initialize(hash)
+    def initialize(hash = {})
       @id =         hash[:id]
       @identifier = hash[:identifier]
       @rooturl =    hash[:rooturl]
