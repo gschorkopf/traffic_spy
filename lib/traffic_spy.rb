@@ -35,7 +35,7 @@ module TrafficSpy
         "{\"identifier\":\"jumpstartlab\"}"
       end
 
-      # Entry looks like: 
+      # Entry looks like:
       # curl -i -d 'identifier=jumpstartlab&rootUrl=http://jumpstartlab.com'  http://localhost:9393/sources
     end
 
