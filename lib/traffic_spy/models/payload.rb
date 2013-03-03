@@ -79,19 +79,13 @@ module TrafficSpy
       data.where(client_id: client_id)
     end
 
-    def self.url_sorter
-      results_hash = {}
-      data.order(Sequel.desc(:url))
+    def self.url_sorter(clients)
+      url_hash = Hash.new(0)
+      clients.collect {|client| client[:url]}.each do |url|
+       url_hash[url] += 1
+      end
+      url_hash.sort_by {|url, hits| hits}.reverse
     end
-
-    # def self.order_urls(results)
-    #   results_hash = Hash.new(0)
-    #   results.collect {|r| r[:url]}.each do |r|
-    #     results_hash[r] += 1
-    #   end
-    #   Hash[results_hash.sort_by {|key, value| value}.reverse]
-    # end
-    # results = payload_class.find_all_by_identifier_id(klient.id)
 
   end
 end
