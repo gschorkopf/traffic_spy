@@ -64,7 +64,7 @@ module TrafficSpy
         id: id,
         client_id: client_id,
         event_id: event_id,
-        useragent: userAgent,
+        userAgent: userAgent,
         url: url,
         requestedAt: requestedAt,
         respondedIn: respondedIn,

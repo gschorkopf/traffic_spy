@@ -71,7 +71,7 @@ module TrafficSpy
         "{\"400 Bad Request\":\"the identifier does not exist\"}"
       else
         @urls = source_idents.select(:rooturl).to_a
-        @broswers = Payload.data.select(:userAgent).to_a
+        @browsers = Payload.data.select(:userAgent).to_a
         erb :data
       end
 
