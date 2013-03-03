@@ -100,7 +100,7 @@ describe TrafficSpy::Payload do
   end
 
   describe "data analysis" do
-    describe "url_sorter" do
+    describe ".url_sorter" do
       it "sorts from most requested URLS to least requested URLS" do
         @payload_one.commit
         @payload_two.commit
@@ -120,7 +120,7 @@ describe TrafficSpy::Payload do
       end
     end
 
-    describe "os_sorter" do
+    describe ".os_sorter" do
       it "outputs OS breakdown across all requests" do
         @payload_one.commit
         @payload_two.commit
@@ -130,15 +130,23 @@ describe TrafficSpy::Payload do
       end
     end
 
-    describe "resolution_sorter" do
+    describe ".rez_sorter" do
       it "outputs screen Resolution across all requests" do
-        pending
+        @payload_one.commit
+        @payload_two.commit
+        @payload_three.commit
+        payloads = app.find_all_by_client_id(1)
+        expect(app.rez_sorter(payloads).to_a.first.first).to eq "800 x 600"
       end
     end
 
-    describe "rt_sorter" do
+    describe ".rt_sorter" do
       it "outputs longest, average response time per URL to shortest, average response time per URL" do
-        pending
+        @payload_one.commit
+        @payload_two.commit
+        @payload_three.commit
+        payloads = app.find_all_by_client_id(1)
+        expect(app.rt_sorter(payloads).to_a).to eq 37
       end
     end
   end

@@ -102,7 +102,27 @@ module TrafficSpy
       end
       os_hash.sort_by {|os, hits| hits}.reverse
     end
+
+    def self.rez_sorter(payloads)
+      rez_hash = Hash.new(0)
+      payloads.collect do |pl|
+        "#{pl[:resolution_width]} x #{pl[:resolution_height]}"
+      end.each do |rez|
+        rez_hash[rez] += 1
+      end
+      rez_hash.sort_by {|rez, hits| hits}.reverse
+    end
     
+    def self.rt_sorter(payloads)
+      ri_hash = Hash.new(0)
+      payloads.collect do |pl|
+        ri_hash[pl[:url]] += pl[:responded_in] if pl[:responded_in] != nil
+      end
+      ri_hash
+    end
+
+    def self.rt_
+    end
 
   end
 end
