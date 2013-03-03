@@ -24,7 +24,7 @@ describe TrafficSpy::Payload do
       "requestedAt" => "2013-02-15 21:37:28 -0700",
       "respondedIn" => 35,
       "referredBy" => "http://jumpstartlab.com",
-      "userAgent" => "Safari/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17",
+      "userAgent" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17",
       "resolutionWidth" => "800",
       "resolutionHeight" => "600",
       }
@@ -33,7 +33,7 @@ describe TrafficSpy::Payload do
       "requestedAt" => "2013-02-14 21:37:28 -0700",
       "respondedIn" => 23,
       "referredBy" => "http://jumpstartlab.com",
-      "userAgent" => "Safari/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17",
+      "userAgent" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17",
       "resolutionWidth" => "800",
       "resolutionHeight" => "600",
       }
@@ -51,27 +51,15 @@ describe TrafficSpy::Payload do
 
   describe "initialize stores variables" do
     it "stores a hash of data" do
-<<<<<<< HEAD
-      expect(@payload.url).to eq "http://jumpstartlab.com/blog"
-      expect(@payload.requestedAt).to eq "2013-02-16 21:38:28 -0700"
-      expect(@payload.respondedIn).to eq 37
-      expect(@payload.referredBy).to eq "http://jumpstartlab.com"
-      expect(@payload.requestType).to eq "GET"
-      expect(@payload.userAgent).to eq "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17"
-      expect(@payload.resolutionWidth).to eq "1920"
-      expect(@payload.resolutionHeight).to eq "1280"
-      expect(@payload.ip).to eq "63.29.38.211"
-=======
       expect(@payload_one.url).to eq "http://jumpstartlab.com/blog"
-      expect(@payload_one.requestedAt).to eq "2013-02-16 21:38:28 -0700"
-      expect(@payload_one.respondedIn).to eq 37
-      expect(@payload_one.referredBy).to eq "http://jumpstartlab.com"
-      expect(@payload_one.requestType).to eq "GET"
-      expect(@payload_one.userAgent).to eq "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17"
-      expect(@payload_one.resolutionWidth).to eq "1920"
-      expect(@payload_one.resolutionHeight).to eq "1280"
+      expect(@payload_one.requested_at).to eq "2013-02-16 21:38:28 -0700"
+      expect(@payload_one.responded_in).to eq 37
+      expect(@payload_one.referred_by).to eq "http://jumpstartlab.com"
+      expect(@payload_one.request_type).to eq "GET"
+      expect(@payload_one.user_agent).to eq "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17"
+      expect(@payload_one.resolution_width).to eq "1920"
+      expect(@payload_one.resolution_height).to eq "1280"
       expect(@payload_one.ip).to eq "63.29.38.211" 
->>>>>>> 6d25ae5f78dc78999c579437a3fc97f64e7ab078
     end
   end
 
@@ -86,7 +74,7 @@ describe TrafficSpy::Payload do
     it "inserts the current payload into the payloads table" do
       @payload_one.commit
       expect(app.data.where(id: 1).to_a.count).to eq 1
-      expect(app.data.where(id: 1).to_a[0][:resolutionWidth]).to eq "1920"
+      expect(app.data.where(id: 1).to_a[0][:resolution_width]).to eq "1920"
     end
   end
 
@@ -112,40 +100,53 @@ describe TrafficSpy::Payload do
   end
 
   describe "data analysis" do
-    describe "url_sorter" do
+    describe ".url_sorter" do
       it "sorts from most requested URLS to least requested URLS" do
         @payload_one.commit
         @payload_two.commit
         @payload_three.commit
-        clients = app.find_all_by_client_id(1)
-        expect(app.url_sorter(clients).to_a.first.first).to eq "http://jumpstartlab.com/gschool"
+        payloads = app.find_all_by_client_id(1)
+        expect(app.url_sorter(payloads).to_a.first.first).to eq "http://jumpstartlab.com/gschool"
       end
     end
 
     describe ".browser_sorter" do
       it "outputs web browser breakdown across all requests" do
-        pending
-        # @payload.commit
-        # @payloadtwo.commit
-        # expect(app.browser_sorter.to_a).to eq nil
+        @payload_one.commit
+        @payload_two.commit
+        @payload_three.commit
+        payloads = app.find_all_by_client_id(1)
+        expect(app.browser_sorter(payloads).to_a.first.first).to eq "Chrome"
       end
     end
 
-    describe "os_sorter" do
+    describe ".os_sorter" do
       it "outputs OS breakdown across all requests" do
-        pending
+        @payload_one.commit
+        @payload_two.commit
+        @payload_three.commit
+        payloads = app.find_all_by_client_id(1)
+        expect(app.os_sorter(payloads).to_a.first.first).to eq "Macintosh"
       end
     end
 
-    describe "resolution_sorter" do
+    describe ".rez_sorter" do
       it "outputs screen Resolution across all requests" do
-        pending
+        @payload_one.commit
+        @payload_two.commit
+        @payload_three.commit
+        payloads = app.find_all_by_client_id(1)
+        expect(app.rez_sorter(payloads).to_a.first.first).to eq "800 x 600"
       end
     end
 
-    describe "rt_sorter" do
+    describe ".rt_sorter" do
       it "outputs longest, average response time per URL to shortest, average response time per URL" do
-        pending
+        @payload_one.commit
+        @payload_two.commit
+        @payload_three.commit
+        payloads = app.find_all_by_client_id(1)
+        expect(app.rt_sorter(payloads).to_a).to eq 37
       end
     end
   end

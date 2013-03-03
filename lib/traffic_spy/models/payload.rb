@@ -1,26 +1,26 @@
 module TrafficSpy
   class Payload
     attr_accessor :id,          :client_id,   :event_id,
-                  :url,         :requestedAt,
-                  :respondedIn, :referredBy,  :requestType,
-                  :userAgent,   :resolutionWidth,
-                  :resolutionHeight,  :ip, :status
+                  :url,         :requested_at,
+                  :responded_in, :referred_by,  :request_type,
+                  :user_agent,   :resolution_width,
+                  :resolution_height,  :ip, :status
 
     def initialize(hash = {}, client_id = nil)
       if hash == {}
         @status = :empty
       else
-        @client_id       = client_id
+        @client_id        = client_id
         # @event_id        = Event.find_event_id(stuff)
-        @userAgent       = hash["userAgent"]
-        @url             = hash["url"]
-        @requestedAt     = hash["requestedAt"]
-        @respondedIn     = hash["respondedIn"]
-        @referredBy      = hash["referredBy"]
-        @requestType     = hash["requestType"]
-        @resolutionWidth = hash["resolutionWidth"]
-        @resolutionHeight= hash["resolutionHeight"]
-        @ip              = hash["ip"]
+        @user_agent       = hash["userAgent"]
+        @url              = hash["url"]
+        @requested_at     = hash["requestedAt"]
+        @responded_in     = hash["respondedIn"]
+        @referred_by      = hash["referredBy"]
+        @request_type     = hash["requestType"]
+        @resolution_width = hash["resolutionWidth"]
+        @resolution_height= hash["resolutionHeight"]
+        @ip               = hash["ip"]
       end
     end
 
@@ -29,7 +29,7 @@ module TrafficSpy
     end
 
     def self.exists?(payload)
-      Payload.data.where(url: payload.url).where(requestedAt: payload.requestedAt).count > 0
+      Payload.data.where(url: payload.url).where(requested_at: payload.requested_at).count > 0
     end
 
     def self.data
@@ -47,14 +47,14 @@ module TrafficSpy
         foreign_key :client_id
         foreign_key :event_id
         # "eventName": "socialLogin" Connect to event.rb
-        String      :userAgent
+        String      :user_agent
         String      :url
-        DateTime    :requestedAt
-        Integer     :respondedIn
-        String      :referredBy
-        String      :requestType
-        String      :resolutionWidth
-        String      :resolutionHeight
+        DateTime    :requested_at
+        Integer     :responded_in
+        String      :referred_by
+        String      :request_type
+        String      :resolution_width
+        String      :resolution_height
         String      :ip
       end
     end
@@ -64,13 +64,13 @@ module TrafficSpy
         id: id,
         client_id: client_id,
         event_id: event_id,
-        userAgent: userAgent,
+        user_agent: user_agent,
         url: url,
-        requestedAt: requestedAt,
-        respondedIn: respondedIn,
-        referredBy: referredBy,
-        resolutionWidth: resolutionWidth,
-        resolutionHeight: resolutionHeight,
+        requested_at: requested_at,
+        responded_in: responded_in,
+        referred_by: referred_by,
+        resolution_width: resolution_width,
+        resolution_height: resolution_height,
         ip: ip
         )
     end
@@ -79,12 +79,49 @@ module TrafficSpy
       data.where(client_id: client_id)
     end
 
-    def self.url_sorter(clients)
+    def self.url_sorter(payloads)
       url_hash = Hash.new(0)
-      clients.collect {|client| client[:url]}.each do |url|
+      payloads.collect {|payload| payload[:url]}.each do |url|
        url_hash[url] += 1
       end
       url_hash.sort_by {|url, hits| hits}.reverse
+    end
+
+    def self.browser_sorter(payloads)
+      browser_hash = Hash.new(0)
+      payloads.collect {|payload| payload[:user_agent]}.each do |ua|
+        browser_hash[UserAgent.parse(ua).browser] += 1
+      end
+      browser_hash.sort_by {|browser, hits| hits}.reverse
+    end
+
+    def self.os_sorter(payloads)
+      os_hash = Hash.new(0)
+      payloads.collect {|payload| payload[:user_agent]}.each do |ua|
+        os_hash[UserAgent.parse(ua).platform] += 1
+      end
+      os_hash.sort_by {|os, hits| hits}.reverse
+    end
+
+    def self.rez_sorter(payloads)
+      rez_hash = Hash.new(0)
+      payloads.collect do |pl|
+        "#{pl[:resolution_width]} x #{pl[:resolution_height]}"
+      end.each do |rez|
+        rez_hash[rez] += 1
+      end
+      rez_hash.sort_by {|rez, hits| hits}.reverse
+    end
+    
+    def self.rt_sorter(payloads)
+      ri_hash = Hash.new(0)
+      payloads.collect do |pl|
+        ri_hash[pl[:url]] += pl[:responded_in] if pl[:responded_in] != nil
+      end
+      ri_hash
+    end
+
+    def self.rt_
     end
 
   end
