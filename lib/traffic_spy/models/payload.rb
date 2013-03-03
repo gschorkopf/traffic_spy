@@ -112,7 +112,7 @@ module TrafficSpy
       end
       rez_hash.sort_by {|rez, hits| hits}.reverse
     end
-    
+
     def self.rt_sorter(payloads)
       ri_hash = Hash.new(0)
       payloads.collect do |pl|

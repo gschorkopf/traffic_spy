@@ -8,7 +8,6 @@ require 'json'
 require 'useragent'
 require './lib/traffic_spy/models/client'
 require './lib/traffic_spy/models/payload'
-# require 'digest'
 
 module TrafficSpy
   class Server < Sinatra::Base
@@ -16,9 +15,6 @@ module TrafficSpy
     get '/' do
       erb :error
     end
-
-    # get '/sources' do
-    # end
 
     post '/sources' do
       client = Client.new(identifier: params["identifier"],
@@ -62,17 +58,27 @@ module TrafficSpy
     end
 
     get '/sources/:identifier' do
-      # get client id from identifier
-      # find all payloads where clinet_id == client id
-      # count and store urls associated with client_id
-      source_idents = Client.data.where(identifier: params[:identifier])
+
+      # source_idents = Client.data.where(identifier: params[:identifier])
+      
+
 
       if Client.data.where(identifier: params[:identifier]).to_a.count == 0
         status 400
         "{\"400 Bad Request\":\"the identifier does not exist\"}"
+        erb :error
       else
-        @urls = source_idents.select(:rooturl).to_a
-        @browsers = Payload.data.select(:userAgent).to_a
+        client_id = Client.data.where(identifier: params[:identifier]).to_a.first[:id]
+        payloads_to_use = Payload.find_all_by_client_id(client_id)
+        @urls = Payload.url_sorter(payloads_to_use)
+        # @urls = source_idents.select(:rooturl).to_a
+        @browsers = Payload.data.select(:user_agent).to_a
+        @opp_systems = Payload.os_sorter(payloads_to_use)
+        @screen_rezs = Payload.rez_sorter(payloads_to_use)
+        @response_times = Payload.rt_sorter(payloads_to_use)
+        # @url_spec_data =
+        # @agg_event_data =
+
         erb :data
       end
 
