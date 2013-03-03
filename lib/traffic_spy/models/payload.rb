@@ -87,5 +87,7 @@ module TrafficSpy
       url_hash.sort_by {|url, hits| hits}.reverse
     end
 
+    
+
   end
 end
