@@ -12,6 +12,7 @@ group :development do
   gem 'sequel'
   gem 'sqlite3'
   gem 'json'
+  gem 'useragent'
 end
 
 group :evaluations do
