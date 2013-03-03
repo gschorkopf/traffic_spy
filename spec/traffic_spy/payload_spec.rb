@@ -140,13 +140,14 @@ describe TrafficSpy::Payload do
       end
     end
 
-    describe ".rt_sorter" do
+    describe ".avg_response_times" do
       it "outputs longest, average response time per URL to shortest, average response time per URL" do
         @payload_one.commit
         @payload_two.commit
         @payload_three.commit
         payloads = app.find_all_by_client_id(1)
-        expect(app.rt_sorter(payloads).to_a).to eq 37
+        expect(app.avg_response_times(payloads).first.first).to eq "http://jumpstartlab.com/blog"
+        expect(app.avg_response_times(payloads).first.last).to eq 37
       end
     end
   end

@@ -113,16 +113,31 @@ module TrafficSpy
       rez_hash.sort_by {|rez, hits| hits}.reverse
     end
 
-    def self.rt_sorter(payloads)
-      ri_hash = Hash.new(0)
-      payloads.collect do |pl|
-        ri_hash[pl[:url]] += pl[:responded_in] if pl[:responded_in] != nil
+    def self.avg_response_times(payloads)
+      urls = payloads.exclude(responded_in: nil).select(:url, :responded_in)
+      counts =  urls.group_and_count(:url).inject({}) do |memo, url|
+        memo[url[:url]] = url[:count]; memo
       end
-      ri_hash
+
+      response_times = urls.inject(Hash.new(0)) do |memo, url|
+        memo[url[:url]] += url[:responded_in]
+        memo
+      end
+
+      avg = Hash.new(0)
+      response_times.each do |url, total_time|
+        avg[url] = total_time / counts[url]
+      end
+      avg.sort_by {|k,v| v}.reverse
     end
 
-    def self.rt_
-    end
+    # def self.response_times_for_path(path)
+    #   url = Url.find(path: path)
+
+    #   response_times = database.where(url_id: url.id).
+    #                     exclude(responded_in: nil).select(:responded_in)
+    #   response_times.map { |entry| entry[:responded_in]}.sort
+    # end
 
   end
 end
