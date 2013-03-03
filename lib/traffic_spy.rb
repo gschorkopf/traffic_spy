@@ -7,6 +7,7 @@ require 'sqlite3'
 require 'json'
 require './lib/traffic_spy/models/client'
 require './lib/traffic_spy/models/payload'
+# require 'digest'
 
 module TrafficSpy
   class Server < Sinatra::Base
@@ -39,6 +40,7 @@ module TrafficSpy
     end
 
     post '/sources/:identifier/data' do
+
       hash = JSON.parse(params["payload"])
       payload = Payload.new(hash, Client.data.where(identifier: params[:identifier]).to_a.first[:id])
 
@@ -59,13 +61,18 @@ module TrafficSpy
     end
 
     get '/sources/:identifier' do
+      # get client id from identifier
+      # find all payloads where clinet_id == client id
+      # count and store urls associated with client_id
+      source_idents = Client.data.where(identifier: params[:identifier])
 
       if Client.data.where(identifier: params[:identifier]).to_a.count == 0
         status 400
         "{\"400 Bad Request\":\"the identifier does not exist\"}"
       else
+        @urls = source_idents.select(:rooturl).to_a
+        @browsers = Payload.data.select(:userAgent).to_a
         erb :data
-        status 200
       end
 
     end

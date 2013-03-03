@@ -6,6 +6,7 @@ describe TrafficSpy::Payload do
 
   before do
     app.create_table
+
     hash_one = {
       "url" => "http://jumpstartlab.com/blog",
       "requestedAt" => "2013-02-16 21:38:28 -0700",
@@ -50,6 +51,17 @@ describe TrafficSpy::Payload do
 
   describe "initialize stores variables" do
     it "stores a hash of data" do
+<<<<<<< HEAD
+      expect(@payload.url).to eq "http://jumpstartlab.com/blog"
+      expect(@payload.requestedAt).to eq "2013-02-16 21:38:28 -0700"
+      expect(@payload.respondedIn).to eq 37
+      expect(@payload.referredBy).to eq "http://jumpstartlab.com"
+      expect(@payload.requestType).to eq "GET"
+      expect(@payload.userAgent).to eq "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17"
+      expect(@payload.resolutionWidth).to eq "1920"
+      expect(@payload.resolutionHeight).to eq "1280"
+      expect(@payload.ip).to eq "63.29.38.211"
+=======
       expect(@payload_one.url).to eq "http://jumpstartlab.com/blog"
       expect(@payload_one.requestedAt).to eq "2013-02-16 21:38:28 -0700"
       expect(@payload_one.respondedIn).to eq 37
@@ -59,6 +71,7 @@ describe TrafficSpy::Payload do
       expect(@payload_one.resolutionWidth).to eq "1920"
       expect(@payload_one.resolutionHeight).to eq "1280"
       expect(@payload_one.ip).to eq "63.29.38.211" 
+>>>>>>> 6d25ae5f78dc78999c579437a3fc97f64e7ab078
     end
   end
 
@@ -92,7 +105,7 @@ describe TrafficSpy::Payload do
       @payload_one.commit
       expect(app.exists?(@payload_one)).to eq true
     end
-      
+
     it "return false if the payload does not exist in :payloads" do
       expect(app.exists?(@empty_payload)).to eq false
     end
