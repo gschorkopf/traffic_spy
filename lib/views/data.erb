@@ -7,17 +7,13 @@
     <ul>
       <% @urls.each do |url| %>
         <li>
-          <%= url[:rooturl] %>
+          <%= url %>
         </li>
       <% end %>
     </ul>
     <h3>Browsers</h3>
     <ul>
-      <% @browsers.each do |browser| %>
-        <li>
-          <%= browser[:userAgent] %>
-        </li>
-      <% end %>
+      
     </ul>
   </body>
 </html>

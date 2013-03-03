@@ -66,13 +66,14 @@ module TrafficSpy
       # find all payloads where clinet_id == client id
       # count and store urls associated with client_id
       source_idents = Client.data.where(identifier: params[:identifier])
+      client_id = Client.data.where(identifier: params[:identifier]).to_a.first[:id]
+      payloads_to_use = Payload.find_all_by_client_id(client_id)
 
       if Client.data.where(identifier: params[:identifier]).to_a.count == 0
         status 400
         "{\"400 Bad Request\":\"the identifier does not exist\"}"
       else
-        @urls = source_idents.select(:rooturl).to_a
-        @browsers = Payload.data.select(:userAgent).to_a
+        @urls = Payload.url_sorter(payloads_to_use).to_a
         erb :data
       end
 
