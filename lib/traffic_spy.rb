@@ -59,26 +59,18 @@ module TrafficSpy
     end
 
     get '/sources/:identifier' do
-<<<<<<< HEAD
-
-      # source_idents = Client.data.where(identifier: params[:identifier])
-      
-
-=======
       # get client id from identifier
       # find all payloads where clinet_id == client id
       # count and store urls associated with client_id
       source_idents = Client.data.where(identifier: params[:identifier])
       client_id = Client.data.where(identifier: params[:identifier]).to_a.first[:id]
       payloads_to_use = Payload.find_all_by_client_id(client_id)
->>>>>>> 15ed743181b2273f798c0f0237f5b85d1ad4d55d
 
       if Client.data.where(identifier: params[:identifier]).to_a.count == 0
         status 400
         "{\"400 Bad Request\":\"the identifier does not exist\"}"
         erb :error
       else
-<<<<<<< HEAD
         client_id = Client.data.where(identifier: params[:identifier]).to_a.first[:id]
         payloads_to_use = Payload.find_all_by_client_id(client_id)
         @urls = Payload.url_sorter(payloads_to_use)
@@ -89,10 +81,6 @@ module TrafficSpy
         @response_times = Payload.rt_sorter(payloads_to_use)
         # @url_spec_data =
         # @agg_event_data =
-
-=======
-        @urls = Payload.url_sorter(payloads_to_use).to_a
->>>>>>> 15ed743181b2273f798c0f0237f5b85d1ad4d55d
         erb :data
       end
 
