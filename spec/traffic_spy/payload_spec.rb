@@ -3,10 +3,13 @@ require 'spec_helper'
 describe TrafficSpy::Payload do
 
   let(:app) { TrafficSpy::Payload }
+  let(:cl_app) { TrafficSpy::Client }
 
   before do
     app.create_table
-
+    cl_app.create_table
+    @client = cl_app.new(identifier: 'jumpstartlab', rooturl: 'http://jumpstartlab.com')
+    @client.save
     hash_one = {
       "url" => "http://jumpstartlab.com/blog",
       "requestedAt" => "2013-02-16 21:38:28 -0700",
@@ -44,9 +47,10 @@ describe TrafficSpy::Payload do
   end
 
   after do
-    TrafficSpy::Client.database.drop_table(:payloads)
+    cl_app.database.drop_table(:payloads)
+    cl_app.database.drop_table(:identifiers)
     @payload_one, @payload_two, @payload_three = nil
-    @empty_payload = nil
+    @empty_payload, @client = nil
   end
 
   describe "initialize stores variables" do
@@ -60,6 +64,13 @@ describe TrafficSpy::Payload do
       expect(@payload_one.resolution_width).to eq "1920"
       expect(@payload_one.resolution_height).to eq "1280"
       expect(@payload_one.ip).to eq "63.29.38.211" 
+    end
+  end
+
+  describe "creates and stores attribute for path" do
+    it "path gets stored" do
+      @payload_one.commit
+      expect(app.data.select(:path).first[:path]).to eq "/blog"
     end
   end
 

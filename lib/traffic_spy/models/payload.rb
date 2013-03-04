@@ -49,6 +49,7 @@ module TrafficSpy
         # "eventName": "socialLogin" Connect to event.rb
         String      :user_agent
         String      :url
+        String      :path
         DateTime    :requested_at
         Integer     :responded_in
         String      :referred_by
@@ -66,6 +67,7 @@ module TrafficSpy
         event_id: event_id,
         user_agent: user_agent,
         url: url,
+        path: Payload.get_path(url, Client.find_root_by_id(client_id)),
         requested_at: requested_at,
         responded_in: responded_in,
         referred_by: referred_by,
@@ -73,6 +75,10 @@ module TrafficSpy
         resolution_height: resolution_height,
         ip: ip
         )
+    end
+
+    def self.get_path(url, rooturl)
+      url.gsub(rooturl, '')
     end
 
     def self.find_all_by_client_id(client_id)
@@ -129,10 +135,6 @@ module TrafficSpy
         avg[url] = total_time / counts[url]
       end
       avg.sort_by {|k,v| v}.reverse
-    end
-
-    def self.get_path(url, rooturl)
-      url.gsub(rooturl, '')
     end
 
     def self.response_times_for_path(payloads)

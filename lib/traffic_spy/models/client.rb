@@ -8,6 +8,10 @@ module TrafficSpy
       @rooturl =    hash[:rooturl]
     end
 
+    def self.find_root_by_id(client_id)
+      data.where(id: client_id).to_a.first[:rooturl]
+    end
+
     def self.database
       @database ||= Sequel.sqlite('./db/database.sqlite3')
     end
