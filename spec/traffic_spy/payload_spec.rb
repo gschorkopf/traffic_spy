@@ -8,6 +8,7 @@ describe TrafficSpy::Payload do
   before do
     app.create_table
     cl_app.create_table
+    TrafficSpy::Event.create_table
     @client = cl_app.new(identifier: 'jumpstartlab', rooturl: 'http://jumpstartlab.com')
     @client.save
     hash_one = {
@@ -49,6 +50,7 @@ describe TrafficSpy::Payload do
   after do
     cl_app.database.drop_table(:payloads)
     cl_app.database.drop_table(:identifiers)
+    cl_app.database.drop_table(:events)
     @payload_one, @payload_two, @payload_three = nil
     @empty_payload, @client = nil
   end
