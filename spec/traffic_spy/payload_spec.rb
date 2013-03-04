@@ -63,6 +63,13 @@ describe TrafficSpy::Payload do
     end
   end
 
+  describe ".get_path" do
+    it "returns the path for the url parameter" do
+      path = app.get_path("http://jumpstartlab.com/gschool/", "http://jumpstartlab.com")
+      expect(path).to eq "/gschool/"
+    end
+  end
+
   describe ".create_table" do
     it "creates table for :payloads" do
       app.create_table
@@ -150,6 +157,17 @@ describe TrafficSpy::Payload do
         expect(app.avg_response_times(payloads).first.last).to eq 37
       end
     end
+
+    describe ".response_times_for_path" do
+      it "outputs longest response time to shortest response time" do
+        @payload_one.commit
+        @payload_two.commit
+        @payload_three.commit
+        payloads = app.find_all_by_client_id(1)
+        expect(app.response_times_for_path(payloads)).to eq 40
+      end
+    end
+
   end
 
 

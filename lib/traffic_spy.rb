@@ -43,7 +43,8 @@ module TrafficSpy
     post '/sources/:identifier/data' do
 
       hash = JSON.parse(params["payload"])
-      payload = Payload.new(hash, Client.data.where(identifier: params[:identifier]).to_a.first[:id])
+      client_id = Client.data.where(identifier: params[:identifier]).to_a.first[:id]
+      payload = Payload.new(hash, client_id)
 
       if payload.empty?
         status 400

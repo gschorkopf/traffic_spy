@@ -131,13 +131,13 @@ module TrafficSpy
       avg.sort_by {|k,v| v}.reverse
     end
 
-    # def self.response_times_for_path(path)
-    #   url = Url.find(path: path)
+    def self.get_path(url, rooturl)
+      url.gsub(rooturl, '')
+    end
 
-    #   response_times = database.where(url_id: url.id).
-    #                     exclude(responded_in: nil).select(:responded_in)
-    #   response_times.map { |entry| entry[:responded_in]}.sort
-    # end
+    def self.response_times_for_path(payloads)
+      "pending"
+    end
 
   end
 end
