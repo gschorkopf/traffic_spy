@@ -1,0 +1,58 @@
+    <h3>URL Requests</h3>
+    <ul>
+      <% @urls.each do |url| %>
+        <li>
+          <strong><%= url.first %></strong> has been recieved: <strong><%= url.last %></strong>x
+        </li>
+      <% end %>
+    </ul>
+    &nbsp
+    <h3>Browsers</h3>
+    <ul>
+      <% @browsers.each do |browser| %>
+        <li>
+          <strong><%= browser.first %></strong> has been recieved: <strong><%= browser.last %></strong>x
+        </li>
+      <% end %>
+    </ul>
+    &nbsp
+    <h3>OS</h3>
+    <ul>
+      <% @opp_systems.each do |os| %>
+        <li>
+          <strong><%= os.first %></strong> has been recieved: <strong><%= os.last %></strong>x
+        </li>
+      <% end %>
+    </ul>
+    &nbsp
+    <h3>Screen Resolution(s)</h3>
+    <ul>
+      <% @screen_rezs.each do |sr| %>
+        <li>
+          <strong><%= sr.first %></strong> has been recieved: <strong><%= sr.last %></strong>x
+        </li>
+      <% end %>
+    </ul>
+    &nbsp
+    <h3>Response Time</h3>
+    <ul>
+      <% @response_times.each do |rt| %>
+        <li>
+          <strong><%= rt.first %></strong> Average Response Time: <strong><%= rt.last %></strong>x
+        </li>
+      <% end %>
+    </ul>
+    &nbsp
+    <h3>URL Specific Data</h3>
+    <ul>
+      <% @paths.each do |path| %>
+        <li>
+          <a href= "/sources/<%= @source %>/urls<%= path %>" target="_blank"<b><%= @rooturl %><%= path %></b></a>
+        </li>
+      <% end %>
+      </li>
+    </ul>
+    &nbsp
+    <h3>Event Data</h3>
+    <ul>
+    </ul>
