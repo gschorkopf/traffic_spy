@@ -7,13 +7,53 @@
     <ul>
       <% @urls.each do |url| %>
         <li>
-          <%= url %>
+          <strong><%= url.first %></strong> has been recieved: <strong><%= url.last %></strong>x
         </li>
       <% end %>
     </ul>
+    &nbsp
     <h3>Browsers</h3>
     <ul>
-      
+      <% @browsers.each do |browser| %>
+        <li>
+          <%= browser[:user_agent] %>
+        </li>
+      <% end %>
+    </ul>
+    &nbsp
+    <h3>OS</h3>
+    <ul>
+      <% @opp_systems.each do |os| %>
+        <li>
+          <%= os.first %> <%= os.last %>
+        </li>
+      <% end %>
+    </ul>
+    &nbsp
+    <h3>Screen Resolution(s)</h3>
+    <ul>
+       <% @screen_rezs.each do |sr| %>
+        <li>
+          <strong><%= sr.first %></strong> has been recieved: <strong><%= sr.last %></strong>x
+        </li>
+      <% end %>
+    </ul>
+    &nbsp
+    <h3>Response Time</h3>
+    <ul>
+      <% @response_times.each do |rt| %>
+        <li>
+          <strong><%= rt.first %></strong> has been recieved: <strong><%= rt.last %></strong>x
+        </li>
+      <% end %>
+    </ul>
+    &nbsp
+    <h3>URL Specific Data</h3>
+    <ul>
+    </ul>
+    &nbsp
+    <h3>Event Data</h3>
+    <ul>
     </ul>
   </body>
 </html>

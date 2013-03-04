@@ -112,7 +112,7 @@ module TrafficSpy
       end
       rez_hash.sort_by {|rez, hits| hits}.reverse
     end
-    
+
     def self.avg_response_times(payloads)
       urls = payloads.exclude(responded_in: nil).select(:url, :responded_in)
       counts =  urls.group_and_count(:url).inject({}) do |memo, url|
