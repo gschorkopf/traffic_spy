@@ -11,7 +11,7 @@ module TrafficSpy
         @status = :empty
       else
         @client_id        = client_id
-        # @event_id        = Event.find_event_id(stuff)
+        @event_id         = Event.find_or_create(hash["eventName"])
         @user_agent       = hash["userAgent"]
         @url              = hash["url"]
         @requested_at     = hash["requestedAt"]
@@ -46,7 +46,6 @@ module TrafficSpy
         primary_key :id
         foreign_key :client_id
         foreign_key :event_id
-        # "eventName": "socialLogin" Connect to event.rb
         String      :user_agent
         String      :url
         String      :path
