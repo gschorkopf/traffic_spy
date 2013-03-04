@@ -7,11 +7,11 @@ module TrafficSpy
                   :resolution_height,  :ip, :status
 
     def initialize(hash = {}, client_id = nil)
-      if hash == {} || hash == ""
+      if hash == {} || hash == "" || hash == nil
         @status = :empty
       else
         @client_id        = client_id
-        @event_id         = Event.switchboard(hash["eventName"])
+        @event_id         = Event.switchboard(hash["eventName"], client_id)
         @user_agent       = hash["userAgent"]
         @url              = hash["url"]
         @requested_at     = hash["requestedAt"]

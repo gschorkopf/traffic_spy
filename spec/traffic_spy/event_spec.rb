@@ -59,7 +59,7 @@ describe TrafficSpy::Event do
 
   describe ".switchboard" do
     it "returns an event_id field for payload" do
-      expect(app.switchboard('socialLogin')).to eq 1
+      expect(app.switchboard('socialLogin', 1)).to eq 1
     end
   end
 
