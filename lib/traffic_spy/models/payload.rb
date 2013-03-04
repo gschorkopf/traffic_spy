@@ -7,7 +7,7 @@ module TrafficSpy
                   :resolution_height,  :ip, :status
 
     def initialize(hash = {}, client_id = nil)
-      if hash == {}
+      if hash == {} || hash == ""
         @status = :empty
       else
         @client_id        = client_id
@@ -138,7 +138,11 @@ module TrafficSpy
     end
 
     def self.response_times_for_path(payloads)
-      "pending"
+      path_hash = Hash.new(0)
+      payloads.collect {|payload| payload[:path]}.each do |path|
+       path_hash[path] += 1
+      end
+      path_hash.sort_by {|path, hits| hits}.reverse
     end
 
   end
