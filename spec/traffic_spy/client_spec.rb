@@ -6,9 +6,9 @@ describe TrafficSpy::Client do
 
   before do
     app.create_table
-    @good_client = app.new(identifier: 'Amazon', rooturl: 'www.amazon.com/doggie_sweaters')
-    @bad_client = app.new(identifier: nil, rooturl: 'www.amazon.com/doggie_sweaters')
-    @stored_client = app.new(identifier: 'Google', rooturl: 'www.google.com/offers')
+    @good_client = app.new(identifier: 'Amazon', rooturl: 'www.amazon.com')
+    @bad_client = app.new(identifier: nil, rooturl: 'www.amazon.com')
+    @stored_client = app.new(identifier: 'Google', rooturl: 'www.google.com')
   end
 
   after do
@@ -20,7 +20,7 @@ describe TrafficSpy::Client do
   describe "initialize stores variables" do
     it "stores a hash of data" do
       expect(@good_client.identifier).to eq 'Amazon'
-      expect(@good_client.rooturl).to eq 'www.amazon.com/doggie_sweaters'
+      expect(@good_client.rooturl).to eq 'www.amazon.com'
     end
   end
 
@@ -52,7 +52,14 @@ describe TrafficSpy::Client do
     it "inserts the current client into the :identifiers table" do
       @stored_client.save
       expect(app.data.where(id: 1).to_a.count).to eq 1
-      expect(app.data.where(rooturl: 'www.google.com/offers').to_a[0][:identifier]).to eq "Google"
+      expect(app.data.where(rooturl: 'www.google.com').to_a[0][:identifier]).to eq "Google"
+    end
+  end
+
+  describe ".find_root_by_id" do
+    it "given the client_id of the payload, returns the rooturl" do
+      @good_client.save
+      expect(app.find_root_by_id(1)).to eq "www.amazon.com"
     end
   end
 

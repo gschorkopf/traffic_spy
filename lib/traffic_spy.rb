@@ -1,13 +1,5 @@
 Bundler.require
-
-require 'sinatra'
-require 'sinatra/base'
-require 'sequel'
-require 'sqlite3'
-require 'json'
-require 'useragent'
-require './lib/traffic_spy/models/client'
-require './lib/traffic_spy/models/payload'
+require './lib/traffic_spy/models/init'
 
 module TrafficSpy
   class Server < Sinatra::Base
@@ -39,7 +31,8 @@ module TrafficSpy
     post '/sources/:identifier/data' do
 
       hash = JSON.parse(params["payload"])
-      payload = Payload.new(hash, Client.data.where(identifier: params[:identifier]).to_a.first[:id])
+      client_id = Client.data.where(identifier: params[:identifier]).to_a.first[:id]
+      payload = Payload.new(hash, client_id)
 
       if payload.empty?
         status 400
