@@ -1,6 +1,7 @@
 <html>
   <head>
     <title>TrafficSpy</title>
+    <link rel="stylesheet" href="/css_file-name">
   </head>
   <body>
     <h3>URL Requests</h3>
@@ -16,7 +17,7 @@
     <ul>
       <% @browsers.each do |browser| %>
         <li>
-          <%= browser[:user_agent] %>
+          <strong><%= browser.first %></strong> has been recieved: <strong><%= browser.last %></strong>x
         </li>
       <% end %>
     </ul>
@@ -25,14 +26,14 @@
     <ul>
       <% @opp_systems.each do |os| %>
         <li>
-          <%= os.first %> <%= os.last %>
+          <strong><%= os.first %></strong> has been recieved: <strong><%= os.last %></strong>x
         </li>
       <% end %>
     </ul>
     &nbsp
     <h3>Screen Resolution(s)</h3>
     <ul>
-       <% @screen_rezs.each do |sr| %>
+      <% @screen_rezs.each do |sr| %>
         <li>
           <strong><%= sr.first %></strong> has been recieved: <strong><%= sr.last %></strong>x
         </li>
@@ -43,13 +44,19 @@
     <ul>
       <% @response_times.each do |rt| %>
         <li>
-          <strong><%= rt.first %></strong> has been recieved: <strong><%= rt.last %></strong>x
+          <strong><%= rt.first %></strong> Average Response Time: <strong><%= rt.last %></strong>x
         </li>
       <% end %>
     </ul>
     &nbsp
     <h3>URL Specific Data</h3>
     <ul>
+      <% @spec_data.each do |url| %>
+        <li>
+          <a href= "http://localhost:9393/sources/IDENTIFIER/urls/RELATIVE/PATH" target="_blank"<b><%= url.first %></b></a>
+        </li>
+      <% end %>
+      </li>
     </ul>
     &nbsp
     <h3>Event Data</h3>
