@@ -174,9 +174,9 @@ describe TrafficSpy::Payload do
         @payload_one.commit
         @payload_two.commit
         @payload_three.commit
-        payloads = app.find_all_by_client_id(1)
-        expect(app.response_times_for_path(payloads).first.last).to eq 2
-        expect(app.response_times_for_path(payloads).first.first).to eq '/gschool'
+        payloads = app.find_all_by_path('/gschool')
+        expect(app.response_times_for_path(payloads).first).to eq 35
+        expect(app.response_times_for_path(payloads).last).to eq 23
       end
     end
 

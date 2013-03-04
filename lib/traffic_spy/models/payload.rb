@@ -137,12 +137,14 @@ module TrafficSpy
       avg.sort_by {|k,v| v}.reverse
     end
 
+    def self.find_all_by_path(path)
+      data.where(path: path)
+    end
+
     def self.response_times_for_path(payloads)
-      path_hash = Hash.new(0)
-      payloads.collect {|payload| payload[:path]}.each do |path|
-       path_hash[path] += 1
-      end
-      path_hash.sort_by {|path, hits| hits}.reverse
+      paths = payloads.exclude(responded_in: nil).select(:path, :responded_in).to_a
+
+      paths.collect {|path| path[:responded_in]}.sort.reverse
     end
 
   end
