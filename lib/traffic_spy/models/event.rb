@@ -3,15 +3,15 @@ module TrafficSpy
 
     def self.switchboard(name)
       if Event.exists?(name)
-        Event.find_all_by_event_name(name)[0][:id]
+        Event.find_by_event(name)[:id]
       else
         Event.register(name)
-        Event.find_all_by_event_name(name)[0][:id]
+        Event.find_by_event(name)[:id]
       end
     end
 
-    def self.find_all_by_event_name(name)
-      Event.data.where(name: name).to_a
+    def self.find_by_event(name)
+      Event.data.where(name: name).to_a[0]
     end
     
     def self.create_table
@@ -23,7 +23,7 @@ module TrafficSpy
     end
 
     def self.exists?(name)
-      Event.find_all_by_event_name(name).to_a.count > 0
+      Event.find_by_event(name).to_a.count > 0
     end
 
     def self.register(name)
@@ -50,8 +50,13 @@ module TrafficSpy
       event_hash.sort_by {|name, hits| hits}.reverse
     end
 
-    def self.hourly_events_sorter(events)
-      "pending"
+    def self.hourly_events_sorter(event_id)
+      hour_hash = Hash.new(0)
+      payloads = Payload.find_all_by_event_id(event_id).to_a
+      payloads.each do |payload|
+        hour_hash[payload[:requested_at].strftime("%H").to_i] += 1
+      end
+      hour_hash
     end
 
   end

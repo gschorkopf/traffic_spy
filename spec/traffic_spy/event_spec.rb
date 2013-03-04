@@ -3,9 +3,14 @@ require 'spec_helper'
 describe TrafficSpy::Event do
 
   let(:app) { TrafficSpy::Event }
+  let(:cl_app) { TrafficSpy::Client }
 
   before do
     app.create_table
+    TrafficSpy::Payload.create_table
+    cl_app.create_table
+    @client = cl_app.new(identifier: 'jumpstartlab', rooturl: 'http://jumpstartlab.com')
+    @client.save
     hash = {
       "url" => "http://jumpstartlab.com/blog",
       "requestedAt" => "2013-02-16 21:38:28 -0700",
@@ -19,11 +24,14 @@ describe TrafficSpy::Event do
       "ip" => "63.29.38.211"
       }
     @payload = TrafficSpy::Payload.new(hash, 1)
+    @payload.commit
   end
 
   after do
-    @payload = nil
-    TrafficSpy::Client.database.drop_table(:events)
+    @payload, @client = nil
+    cl_app.database.drop_table(:events)
+    cl_app.database.drop_table(:payloads)
+    cl_app.database.drop_table(:identifiers)
   end
 
   describe ".create_table auto-loads event" do
@@ -33,9 +41,9 @@ describe TrafficSpy::Event do
     end
   end
 
-  describe ".find_all_by_event_name" do
+  describe ".find_by_event" do
     it "finds the first instance of an event given the event name" do
-      expect(app.find_all_by_event_name("socialLogin")[0][:id]).to eq 1
+      expect(app.find_by_event("socialLogin")[:id]).to eq 1
     end
   end
 
@@ -63,9 +71,10 @@ describe TrafficSpy::Event do
 
   describe ".hourly_events_sorter" do
     it "returns hourly breakdown of particular event creation dates" do
-      events = app.find_all_by_event_name('socialLogin')
-      hour = Time.now.hour
-      expect(app.hourly_events_sorter(events)).to eq hour
+      event_id = app.find_by_event('socialLogin')[:id]
+      hour_breakdown = app.hourly_events_sorter(event_id)
+      expect(hour_breakdown.first.first).to eq 21
+      expect(hour_breakdown.first.last).to eq 1
     end
   end
 

@@ -84,6 +84,11 @@ module TrafficSpy
       data.where(client_id: client_id)
     end
 
+    def self.find_all_by_event_id(event_id)
+      data.where(event_id: event_id)
+      #untested method
+    end
+
     def self.url_sorter(payloads)
       url_hash = Hash.new(0)
       payloads.collect {|payload| payload[:url]}.each do |url|
