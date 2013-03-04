@@ -52,11 +52,11 @@ module TrafficSpy
 
     def self.hourly_events_sorter(event_id)
       hour_hash = Hash.new(0)
-      payloads = Payload.find_all_by_event_id(event_id).to_a
+      payloads = Payload.find_all_by_event_id(event_id)
       payloads.each do |payload|
         hour_hash[payload[:requested_at].strftime("%H").to_i] += 1
       end
-      hour_hash
+      hour_hash.sort_by {|hour, hits| hour}.reverse
     end
 
   end
