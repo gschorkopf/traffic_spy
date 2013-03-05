@@ -19,6 +19,7 @@ module TrafficSpy
         status 403
         "{\"403 Forbidden\":\"identifier already exists\"}"
       else
+        # Client.create(params[:identifier] params[:rooturl])
         client.save
         status 200
         "{\"identifier\":\"jumpstartlab\"}"
@@ -32,7 +33,9 @@ module TrafficSpy
 
       hash = JSON.parse(params["payload"])
       client_id = Client.data.where(identifier: params[:identifier]).to_a.first[:id]
+      # Client.find_by_identifier
       payload = Payload.new(hash, client_id)
+
 
       if payload.empty?
         status 400
@@ -51,7 +54,7 @@ module TrafficSpy
     end
 
     get '/sources/:identifier' do
-
+      # @client = Client.find_by_identifier(params[:identifier])
       @source = Client.data.where(identifier: params[:identifier]).to_a.first[:identifier]
       # raise @source.inspect
 
@@ -73,40 +76,60 @@ module TrafficSpy
         @url_spec_metrics = Payload.url_sorter(payloads_to_use).to_a
         erb :app_details_index
 
-        @agg_event_data = 
-
       end
 
     end
 
-  get "/sources/:identifier/urls/:path" do
-    @identifier = params[:identifier]
-    @relative_path = params[:path]
+    get "/sources/:identifier/urls/:path" do
+      @identifier = params[:identifier]
+      @relative_path = params[:path]
 
-    @source = Client.data.where(identifier: @identifier).to_a[0]
+      @source = Client.data.where(identifier: @identifier).to_a[0]
 
-    if @source == nil || @relative_path == nil
-      erb :error
-    else
-      path = "/#{@relative_path}"
-      payloads_to_use = Payload.find_all_by_path(path)
-      @response_times = Payload.response_times_for_path(payloads_to_use)
+      if @source == nil || @relative_path == nil
+        erb :error
+      else
+        path = "/#{@relative_path}"
+        payloads_to_use = Payload.find_all_by_path(path)
+        @response_times = Payload.response_times_for_path(payloads_to_use)
 
-      erb :url_stats
+        erb :url_stats
+      end
     end
-  end
 
-    # get "/sources/:identifier/events/:name" do
-    # @identifier = params[:identifier]
-    # @source = Client.data.where(identifier: @identifier).to_a.first[:identifier]
-    # @name = params[:name]
+    get "/sources/:identifier/events" do
+      @identifier = params[:identifier]
+      @source = Client.data.where(identifier: @identifier).to_a.first[:identifier]
+      # raise @source.inspect
 
-    # if #no events have been defined
-    #   "{\"message\":\"No events have been defined.\"}"
-    # else
-    #   payloads_to_use = Payload.find_all_by_path(path)
-    #   @response_times = Payload.response_times_for_path(payloads_to_use)
-    #   erb :app_events_index
+      # if !@source
+      #   "{\"message\":\"No events have been defined.\"}"
+      # else
+
+      # find events that match the source (i.e. "jumpstartlab")
+        @events = Event.most_events_sorter
+        # raise @events.inspect
+
+        erb :app_events_index
+      # sa
+    end
+
+    # get "/sources/:identifier/events/:eventname" do
+    #   @identifier = params[:identifier]
+    #   @name = params[:name]
+    #   @source = Client.data.where(identifier: @identifier).to_a.first[:identifier]
+    #   # raise @source.inspect
+
+    #   # if #no event with the given name has been defined
+    #   #   "{\"message\":\"No events have been defined.\"}"
+    #   # else
+
+    #   # find events that match the source (i.e. "jumpstartlab")
+    #     @events = Event.most_events_sorter
+    #     # raise @events.inspect
+
+    #     erb :app_events_index
+    #   # sa
     # end
 
   end

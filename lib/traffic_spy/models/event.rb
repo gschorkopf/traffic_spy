@@ -13,7 +13,7 @@ module TrafficSpy
     def self.find_by_event(name)
       Event.data.where(name: name).to_a[0]
     end
-    
+
     def self.create_table
       Client.database.create_table? :events do
         primary_key :id
