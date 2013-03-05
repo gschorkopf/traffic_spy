@@ -5,14 +5,22 @@ describe TrafficSpy::Client do
   let(:app) { TrafficSpy::Client }
 
   before do
-    app.create_table
+    TrafficSpy::Client.create_table
+    TrafficSpy::Event.create_table
+    TrafficSpy::Campaign.create_table
+    TrafficSpy::Payload.create_table
+    TrafficSpy::CampaignEvent.create_table
     @good_client = app.new(identifier: 'Amazon', rooturl: 'www.amazon.com')
     @bad_client = app.new(identifier: nil, rooturl: 'www.amazon.com')
     @stored_client = app.new(identifier: 'Google', rooturl: 'www.google.com')
   end
 
   after do
+    app.database.drop_table(:events)
+    app.database.drop_table(:payloads)
     app.database.drop_table(:identifiers)
+    app.database.drop_table(:campaigns)
+    app.database.drop_table(:campaign_events)
     @good_client, @bad_client, @stored_client = nil
   end
 
@@ -60,6 +68,12 @@ describe TrafficSpy::Client do
     it "given the client_id of the payload, returns the rooturl" do
       @good_client.save
       expect(app.find_root_by_id(1)).to eq "www.amazon.com"
+    end
+  end
+
+  describe "verify_table_exists" do
+    it "returns true if the table exists" do
+      expect(app.verify_table_exists).to be true
     end
   end
 

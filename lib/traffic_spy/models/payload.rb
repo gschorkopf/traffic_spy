@@ -7,11 +7,11 @@ module TrafficSpy
                   :resolution_height,  :ip, :status
 
     def initialize(hash = {}, client_id = nil)
-      if hash == {} || hash == ""
+      if hash == {} || hash == "" || hash == nil
         @status = :empty
       else
         @client_id        = client_id
-        # @event_id        = Event.find_event_id(stuff)
+        @event_id         = Event.switchboard(hash["eventName"])
         @user_agent       = hash["userAgent"]
         @url              = hash["url"]
         @requested_at     = hash["requestedAt"]
@@ -46,7 +46,6 @@ module TrafficSpy
         primary_key :id
         foreign_key :client_id
         foreign_key :event_id
-        # "eventName": "socialLogin" Connect to event.rb
         String      :user_agent
         String      :url
         String      :path
@@ -83,6 +82,11 @@ module TrafficSpy
 
     def self.find_all_by_client_id(client_id)
       data.where(client_id: client_id)
+    end
+
+    def self.find_all_by_event_id(event_id)
+      data.where(event_id: event_id)
+      #untested method
     end
 
     def self.url_sorter(payloads)
