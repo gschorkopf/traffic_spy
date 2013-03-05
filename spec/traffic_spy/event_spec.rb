@@ -10,6 +10,7 @@ describe TrafficSpy::Event do
     TrafficSpy::Payload.create_table
     cl_app.create_table
     TrafficSpy::Campaign.create_table
+    TrafficSpy::CampaignEvent.create_table
     @client = cl_app.new(identifier: 'jumpstartlab', rooturl: 'http://jumpstartlab.com')
     @client.save
     hash = {
@@ -34,6 +35,7 @@ describe TrafficSpy::Event do
     cl_app.database.drop_table(:payloads)
     cl_app.database.drop_table(:identifiers)
     cl_app.database.drop_table(:campaigns)
+    cl_app.database.drop_table(:campaign_events)
   end
 
   describe ".create_table auto-loads event" do

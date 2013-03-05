@@ -10,6 +10,7 @@ describe TrafficSpy::Campaign do
     TrafficSpy::Event.create_table
     TrafficSpy::Campaign.create_table
     TrafficSpy::Payload.create_table
+    TrafficSpy::CampaignEvent.create_table
     app.switchboard('socialSignup',
       ['registrationStep1', 'registrationStep2',
       'registrationStep3', 'registrationStep4'])
@@ -20,6 +21,7 @@ describe TrafficSpy::Campaign do
     cl_app.database.drop_table(:payloads)
     cl_app.database.drop_table(:identifiers)
     cl_app.database.drop_table(:campaigns)
+    cl_app.database.drop_table(:campaign_events)
   end
 
   describe ".switchboard" do

@@ -9,6 +9,7 @@ describe TrafficSpy::Client do
     TrafficSpy::Event.create_table
     TrafficSpy::Campaign.create_table
     TrafficSpy::Payload.create_table
+    TrafficSpy::CampaignEvent.create_table
     @good_client = app.new(identifier: 'Amazon', rooturl: 'www.amazon.com')
     @bad_client = app.new(identifier: nil, rooturl: 'www.amazon.com')
     @stored_client = app.new(identifier: 'Google', rooturl: 'www.google.com')
@@ -19,6 +20,7 @@ describe TrafficSpy::Client do
     app.database.drop_table(:payloads)
     app.database.drop_table(:identifiers)
     app.database.drop_table(:campaigns)
+    app.database.drop_table(:campaign_events)
     @good_client, @bad_client, @stored_client = nil
   end
 

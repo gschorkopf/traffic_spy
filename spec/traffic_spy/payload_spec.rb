@@ -10,6 +10,7 @@ describe TrafficSpy::Payload do
     cl_app.create_table
     TrafficSpy::Event.create_table
     TrafficSpy::Campaign.create_table
+    TrafficSpy::CampaignEvent.create_table
     @client = cl_app.new(identifier: 'jumpstartlab', rooturl: 'http://jumpstartlab.com')
     @client.save
     hash_one = {
@@ -55,6 +56,7 @@ describe TrafficSpy::Payload do
     cl_app.database.drop_table(:campaigns)
     @payload_one, @payload_two, @payload_three = nil
     @empty_payload, @client = nil
+    cl_app.database.drop_table(:campaign_events)
   end
 
   describe "initialize stores variables" do
