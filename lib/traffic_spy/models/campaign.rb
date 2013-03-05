@@ -19,20 +19,8 @@ module TrafficSpy
       Campaign.data.insert(name: name)
     end
 
-    def self.create_table
-      Client.database.create_table? :campaigns do
-        primary_key :id
-        String      :name
-      end
-    end
-
     def self.data
-      verify_table_exists
-      Client.database.from(:campaigns)
-    end
-
-    def self.verify_table_exists
-      @table_exists ||= (create_table || true)
+      DB.from(:campaigns)
     end
 
   end

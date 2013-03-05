@@ -12,18 +12,6 @@ module TrafficSpy
       data.where(id: client_id).to_a.first[:rooturl]
     end
 
-    def self.database
-      @database ||= Sequel.sqlite('./db/database.sqlite3')
-    end
-
-    def self.create_table
-      database.create_table? :identifiers do
-        primary_key :id
-        String      :identifier
-        String      :rooturl
-      end
-    end
-
     def missing?
       self.identifier == "" || self.identifier.nil? ||
       self.rooturl == "" || self.rooturl.nil?
@@ -34,12 +22,7 @@ module TrafficSpy
     end
 
     def self.data
-      verify_table_exists
-      database.from(:identifiers)
-    end
-
-    def self.verify_table_exists
-      @table_exists ||= (create_table || true)
+      DB.from(:identifiers)
     end
 
     def save
