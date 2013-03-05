@@ -1,16 +1,21 @@
 module TrafficSpy
   class CampaignEvent
 
+    def self.register(name)
+      CampaignEvent.data.insert(name: name)
+      ###
+    end
 
     def self.create_table
       Client.database.create_table? :campaign_events do
         primary_key :id
         String      :name
+        ###
       end
     end
 
-    def self.register(name)
-      Campaign.data.insert(name: name)
+    def self.find_by_ce(name)
+      CampaignEvent.data.where(name: name).to_a[0]
     end
 
     def self.data

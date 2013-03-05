@@ -61,9 +61,9 @@ describe TrafficSpy::Event do
     end
   end
 
-  describe ".switchboard" do
+  describe ".find_or_create" do
     it "returns an event_id field for payload" do
-      expect(app.switchboard('socialLogin')).to eq 1
+      expect(app.find_or_create('socialLogin')).to eq 1
     end
   end
 

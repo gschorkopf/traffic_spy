@@ -21,4 +21,10 @@ describe TrafficSpy::CampaignEvent do
     cl_app.database.drop_table(:campaign_events)
   end
 
+  describe ".register" do
+    it "registers a campaign event" do
+      pending
+    end
+  end
+
 end

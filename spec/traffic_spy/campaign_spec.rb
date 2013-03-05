@@ -11,7 +11,7 @@ describe TrafficSpy::Campaign do
     TrafficSpy::Campaign.create_table
     TrafficSpy::Payload.create_table
     TrafficSpy::CampaignEvent.create_table
-    app.switchboard('socialSignup',
+    app.find_or_create('socialSignup',
       ['registrationStep1', 'registrationStep2',
       'registrationStep3', 'registrationStep4'])
   end
@@ -24,9 +24,9 @@ describe TrafficSpy::Campaign do
     cl_app.database.drop_table(:campaign_events)
   end
 
-  describe ".switchboard" do
+  describe ".find_or_create" do
     it "returns an array of old or new event_ids" do
-      expect(app.switchboard('socialSignup',
+      expect(app.find_or_create('socialSignup',
       ['registrationStep1', 'registrationStep2',
       'registrationStep3', 'registrationStep4'])).to eq [1,2,3,4]
     end
