@@ -1,7 +1,7 @@
 module TrafficSpy
   class Campaign
-    def self.switchboard(name, event_names)
-      # For traffic_spy.rb, put Campaign.switchboard(params(campaignName), params(eventNames))
+    def self.find_or_create(name, event_names)
+      # For traffic_spy.rb, put Campaign.find_or_create(params(campaignName), params(eventNames))
       Campaign.register(name)
       Event.loop_register(event_names) #array of event ids
       # Campaign.find_by_campaign(name)[:id] <-campaign id

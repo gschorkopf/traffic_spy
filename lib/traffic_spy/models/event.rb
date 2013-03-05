@@ -1,7 +1,7 @@
 module TrafficSpy
   class Event
 
-    def self.switchboard(name)
+    def self.find_or_create(name)
       if Event.exists?(name)
         Event.find_by_event(name)[:id]
       else
@@ -30,7 +30,7 @@ module TrafficSpy
       #untested method
       event_ids = []
       events.each do |event|
-        id = Event.switchboard(event)
+        id = Event.find_or_create(event)
         event_ids.push(id)
       end
       event_ids

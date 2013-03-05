@@ -1,17 +1,17 @@
 module TrafficSpy
   class Payload
-    attr_accessor :id,          :client_id,   :event_id,
+    attr_accessor :id,          :client_id,     :event_id,
                   :url,         :requested_at,
-                  :responded_in, :referred_by,  :request_type,
-                  :user_agent,   :resolution_width,
-                  :resolution_height,  :ip, :status
+                  :responded_in,:referred_by,   :request_type,
+                  :user_agent,  :resolution_width,
+                  :resolution_height,  :ip,     :status
 
     def initialize(hash = {}, client_id = nil)
       if hash == {} || hash == "" || hash == nil
         @status = :empty
       else
         @client_id        = client_id
-        @event_id         = Event.switchboard(hash["eventName"])
+        @event_id         = Event.find_or_create(hash["eventName"])
         @user_agent       = hash["userAgent"]
         @url              = hash["url"]
         @requested_at     = hash["requestedAt"]
