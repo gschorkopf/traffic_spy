@@ -1,12 +1,10 @@
 module TrafficSpy
   class Campaign
     def self.switchboard(name, event_names)
-      if Campaign.exists?(name)
-        Campaign.find_by_campaign(name)[:id]
-      else
-        Campaign.register(name, event_names)
-        Campaign.find_by_campaign(name)[:id]
-      end
+      # For traffic_spy.rb, put Campaign.switchboard(params(campaignName), params(eventNames))
+      Campaign.register(name)
+      Event.loop_register(event_names) #array of event ids
+      # Campaign.find_by_campaign(name)[:id] <-campaign id
     end
 
     def self.find_by_campaign(name)
@@ -17,11 +15,14 @@ module TrafficSpy
       Campaign.find_by_campaign(name).to_a.count > 0
     end
 
+    def self.register(name)
+      Campaign.data.insert(name: name)
+    end
+
     def self.create_table
       Client.database.create_table? :campaigns do
         primary_key :id
         String      :name
-        String      :event_names
       end
     end
 
@@ -32,13 +33,6 @@ module TrafficSpy
 
     def self.verify_table_exists
       @table_exists ||= (create_table || true)
-    end
-
-    def self.register(name, event_names)
-      Campaign.data.insert(
-        :name => name, 
-        :event_names => event_names
-        )
     end
 
   end

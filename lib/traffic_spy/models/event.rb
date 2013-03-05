@@ -1,11 +1,11 @@
 module TrafficSpy
   class Event
 
-    def self.switchboard(name, client_id)
+    def self.switchboard(name)
       if Event.exists?(name)
         Event.find_by_event(name)[:id]
       else
-        Event.register(name, client_id)
+        Event.register(name)
         Event.find_by_event(name)[:id]
       end
     end
@@ -18,7 +18,6 @@ module TrafficSpy
       Client.database.create_table? :events do
         primary_key :id
         String      :name
-        foreign_key :client_id
         DateTime    :created_at
       end
     end
@@ -27,10 +26,19 @@ module TrafficSpy
       Event.find_by_event(name).to_a.count > 0
     end
 
-    def self.register(name, client_id)
+    def self.loop_register(events)
+      #untested method
+      event_ids = []
+      events.each do |event|
+        id = Event.switchboard(event)
+        event_ids.push(id)
+      end
+      event_ids
+    end
+
+    def self.register(name)
       Event.data.insert(
-        :name => name, 
-        :client_id => client_id,
+        :name => name,
         :created_at => Time.now
         )
     end

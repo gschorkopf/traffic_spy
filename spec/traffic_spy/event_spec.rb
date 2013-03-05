@@ -9,6 +9,7 @@ describe TrafficSpy::Event do
     app.create_table
     TrafficSpy::Payload.create_table
     cl_app.create_table
+    TrafficSpy::Campaign.create_table
     @client = cl_app.new(identifier: 'jumpstartlab', rooturl: 'http://jumpstartlab.com')
     @client.save
     hash = {
@@ -32,6 +33,7 @@ describe TrafficSpy::Event do
     cl_app.database.drop_table(:events)
     cl_app.database.drop_table(:payloads)
     cl_app.database.drop_table(:identifiers)
+    cl_app.database.drop_table(:campaigns)
   end
 
   describe ".create_table auto-loads event" do
@@ -59,7 +61,7 @@ describe TrafficSpy::Event do
 
   describe ".switchboard" do
     it "returns an event_id field for payload" do
-      expect(app.switchboard('socialLogin', 1)).to eq 1
+      expect(app.switchboard('socialLogin')).to eq 1
     end
   end
 
@@ -75,6 +77,12 @@ describe TrafficSpy::Event do
       hour_breakdown = app.hourly_events_sorter(event_id)
       expect(hour_breakdown.first.first).to eq 21
       expect(hour_breakdown.first.last).to eq 1
+    end
+  end
+  
+  describe "verify_table_exists" do
+    it "returns true if the table exists" do
+      expect(app.verify_table_exists).to be true
     end
   end
 

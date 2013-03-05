@@ -9,6 +9,7 @@ describe TrafficSpy::Payload do
     app.create_table
     cl_app.create_table
     TrafficSpy::Event.create_table
+    TrafficSpy::Campaign.create_table
     @client = cl_app.new(identifier: 'jumpstartlab', rooturl: 'http://jumpstartlab.com')
     @client.save
     hash_one = {
@@ -51,6 +52,7 @@ describe TrafficSpy::Payload do
     cl_app.database.drop_table(:payloads)
     cl_app.database.drop_table(:identifiers)
     cl_app.database.drop_table(:events)
+    cl_app.database.drop_table(:campaigns)
     @payload_one, @payload_two, @payload_three = nil
     @empty_payload, @client = nil
   end
@@ -182,6 +184,12 @@ describe TrafficSpy::Payload do
       end
     end
 
+  end
+
+  describe "verify_table_exists" do
+    it "returns true if the table exists" do
+      expect(app.verify_table_exists).to be true
+    end
   end
 
 

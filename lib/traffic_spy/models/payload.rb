@@ -11,7 +11,7 @@ module TrafficSpy
         @status = :empty
       else
         @client_id        = client_id
-        @event_id         = Event.switchboard(hash["eventName"], client_id)
+        @event_id         = Event.switchboard(hash["eventName"])
         @user_agent       = hash["userAgent"]
         @url              = hash["url"]
         @requested_at     = hash["requestedAt"]
