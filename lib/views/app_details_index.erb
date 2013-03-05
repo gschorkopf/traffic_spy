@@ -38,7 +38,7 @@
     <ul>
       <% @response_times.each do |rt| %>
         <li>
-          <strong><%= rt.first %></strong> Average Response Time: <strong><%= rt.last %></strong>x
+          <strong><%= rt.first %></strong> Average Response Time: <strong><%= rt.last %></strong>s
         </li>
       <% end %>
     </ul>
@@ -55,4 +55,13 @@
     &nbsp
     <h3>Event Data</h3>
     <ul>
+        <li>
+          <a href= "/sources/<%=  %>/events" target="_blank"<b>View Agregate Event Data Here</b></a>
+        </li>
+      </li>
     </ul>
+    &nbsp
+    &nbsp
+    &nbsp
+    &nbsp
+    &nbsp
