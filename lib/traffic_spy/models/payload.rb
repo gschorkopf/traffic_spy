@@ -76,9 +76,9 @@ module TrafficSpy
         )
     end
 
-    def self.get_path(url, rooturl)
-      url.gsub(rooturl, '')
-    end
+      def self.get_path(url, rooturl)
+        url.gsub(rooturl, '')
+      end
 
     def self.find_all_by_client_id(client_id)
       data.where(client_id: client_id)
