@@ -25,7 +25,7 @@ describe TrafficSpy::Campaign do
     end
 
     it "creates a new campaign" do
-      expect(app.find_by_campaign('socialSignup')[:name]).to eq 'socialSignup'
+      expect(app.find_by_name('socialSignup')[:name]).to eq 'socialSignup'
     end
   end
 
@@ -42,7 +42,7 @@ describe TrafficSpy::Campaign do
   describe ".register" do
     it "registers a new campaign name" do
       app.register('bananaRama')
-      expect(app.find_by_campaign('bananaRama')[:name]).to eq "bananaRama"
+      expect(app.find_by_name('bananaRama')[:name]).to eq "bananaRama"
     end
   end
 

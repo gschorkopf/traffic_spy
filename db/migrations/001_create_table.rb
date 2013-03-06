@@ -36,9 +36,6 @@ Sequel.migration do
   end
 end
 
-# TODO: create migration file
-# put all migrations in first file
-# make sure migrations work
-# rename class finders to use column name
-# erase verify table exists (just make sure they do)
+# TODO: 
+# analytics class?
 # look into/use group_and_count method in sorters

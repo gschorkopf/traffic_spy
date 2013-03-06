@@ -3,19 +3,28 @@ module TrafficSpy
 
     def self.find_or_create(name)
       if Event.exists?(name)
-        Event.find_by_event(name)[:id]
+        Event.find_by_name(name)[:id]
       else
         Event.register(name)
-        Event.find_by_event(name)[:id]
+        Event.find_by_name(name)[:id]
       end
     end
 
-    def self.find_by_event(name)
+    def self.find_by_name(name)
       Event.data.where(name: name).to_a[0]
     end
 
+    def self.find_all_by_client_id(client_id)
+      client_payloads = Payload.data.where(client_id: client_id)
+      event_ids = client_payloads.collect {|payload| payload[:event_id] }
+      events = event_ids.collect do |id|
+        Event.data.where(id: id).to_a
+      end
+      events.first
+    end
+
     def self.exists?(name)
-      Event.find_by_event(name).to_a.count > 0
+      Event.find_by_name(name).to_a.count > 0
     end
 
     def self.loop_register(events)
@@ -39,9 +48,9 @@ module TrafficSpy
       DB.from(:events)
     end
 
-    def self.most_events_sorter
+    def self.most_events_sorter(payloads)
       event_hash = Hash.new(0)
-      Event.data.collect {|event| event[:name]}.each do |name|
+      payloads.collect {|event| event[:name]}.each do |name|
        event_hash[name] += 1
       end
       event_hash.sort_by {|name, hits| hits}.reverse
@@ -51,7 +60,7 @@ module TrafficSpy
       hour_hash = Hash.new(0)
       payloads = Payload.find_all_by_event_id(event_id)
       payloads.each do |payload|
-        hour_hash[payload[:requested_at].strftime("%H").to_i] += 1
+        hour_hash[payload[:requested_at].hour] += 1
       end
       hour_hash.sort_by {|hour, hits| hour}.reverse
     end
