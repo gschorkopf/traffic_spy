@@ -17,8 +17,6 @@ describe TrafficSpy::Client do
     @good_client, @bad_client, @stored_client = nil
   end
 
-# DB.table_exists?(:foo)
-
   describe "initialize stores variables" do
     it "stores a hash of data" do
       expect(@good_client.identifier).to eq 'Amazon'
@@ -26,12 +24,13 @@ describe TrafficSpy::Client do
     end
   end
 
-  # describe ".create_table" do
-  #   it "creates table for :identifiers" do
-  #     app.create_table
-  #     expect(app.data.select.to_a).to eq []
-  #   end
-  # end
+  describe ".find_by_identifier" do
+    it "returns a client associated with the identifier" do
+      @good_client.save
+      client = app.find_by_identifier('Amazon')
+      expect(client[:rooturl]).to eq 'www.amazon.com'
+    end
+  end
 
   describe "#missing?" do
     it "returns true if both paramaters are provided" do
