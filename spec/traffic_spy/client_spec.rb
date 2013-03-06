@@ -52,8 +52,9 @@ describe TrafficSpy::Client do
   describe ".save" do
     it "inserts the current client into the :identifiers table" do
       @stored_client.save
+      client = app.data.where(rooturl: 'www.google.com')
       expect(app.data.where(id: 1).to_a.count).to eq 1
-      expect(app.data.where(rooturl: 'www.google.com').to_a[0][:identifier]).to eq "Google"
+      expect(client.to_a[0][:identifier]).to eq "Google"
     end
   end
 

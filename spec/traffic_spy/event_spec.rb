@@ -8,7 +8,8 @@ describe TrafficSpy::Event do
 
   before do
     data.before
-    @client = cl_app.new(identifier: 'jumpstartlab', rooturl: 'http://jumpstartlab.com')
+    @client = cl_app.new(identifier: 'jumpstartlab',
+                         rooturl: 'http://jumpstartlab.com')
     @client.save
     hash = {
       "url" => "http://jumpstartlab.com/blog",
@@ -17,7 +18,8 @@ describe TrafficSpy::Event do
       "referredBy" => "http://jumpstartlab.com",
       "requestType" => "GET",
       "eventName" => "socialLogin",
-      "userAgent" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17",
+      "userAgent" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) "+
+      "AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17",
       "resolutionWidth" => "1920",
       "resolutionHeight" => "1280",
       "ip" => "63.29.38.211"
@@ -54,7 +56,7 @@ describe TrafficSpy::Event do
   end
 
   describe ".most_events_sorter" do
-    it "returns list of events from most received to least for given payloads" do
+    it "returns list of events from most received to least for payloads" do
       events = app.find_all_by_client_id(1)
       expect(app.most_events_sorter(events).first.first).to eq 'socialLogin'
     end

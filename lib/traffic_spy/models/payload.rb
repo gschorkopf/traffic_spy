@@ -21,7 +21,8 @@ module TrafficSpy
     end
 
     def self.exists?(payload)
-      Payload.data.where(url: payload.url).where(requested_at: payload.requested_at).count > 0
+      p = Payload.data.where(url: payload.url)
+      p.where(requested_at: payload.requested_at).count > 0
     end
 
     def self.data
@@ -98,10 +99,12 @@ module TrafficSpy
       end
 
       response_times = urls.inject(Hash.new(0)) do |memo, url|
-        memo[url[:url]] += url[:responded_in]
-        memo
+        memo[url[:url]] += url[:responded_in]; memo
       end
+      order_response_times(response_times, counts)
+    end
 
+    def self.order_response_times(response_times, counts)
       avg = Hash.new(0)
       response_times.each do |url, total_time|
         avg[url] = total_time / counts[url]
@@ -114,7 +117,8 @@ module TrafficSpy
     end
 
     def self.response_times_for_path(payloads)
-      paths = payloads.exclude(responded_in: nil).select(:path, :responded_in).to_a
+      non_nil = payloads.exclude(responded_in: nil)
+      paths = non_nil.select(:path, :responded_in).to_a
 
       paths.collect {|path| path[:responded_in]}.sort.reverse
     end
