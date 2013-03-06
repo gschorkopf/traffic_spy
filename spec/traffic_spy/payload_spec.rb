@@ -39,7 +39,7 @@ describe TrafficSpy::Payload do
   describe "creates and stores attribute for path" do
     it "path gets stored" do
       @p1.commit
-      expect(app.data.select(:path).to_a.count).to eq "/blog"
+      expect(app.data.select(:path).to_a.first[:path]).to eq "/blog"
     end
   end
 
