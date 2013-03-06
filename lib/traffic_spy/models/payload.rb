@@ -33,30 +33,7 @@ module TrafficSpy
     end
 
     def self.data
-      verify_table_exists
-      Client.database.from(:payloads)
-    end
-
-    def self.verify_table_exists
-      @table_exists ||= (create_table || true)
-    end
-
-    def self.create_table
-      Client.database.create_table? :payloads do
-        primary_key :id
-        foreign_key :client_id
-        foreign_key :event_id
-        String      :user_agent
-        String      :url
-        String      :path
-        DateTime    :requested_at
-        Integer     :responded_in
-        String      :referred_by
-        String      :request_type
-        String      :resolution_width
-        String      :resolution_height
-        String      :ip
-      end
+      DB.from(:payloads)
     end
 
     def commit
@@ -76,9 +53,9 @@ module TrafficSpy
         )
     end
 
-      def self.get_path(url, rooturl)
-        url.gsub(rooturl, '')
-      end
+    def self.get_path(url, rooturl)
+      url.gsub(rooturl, '')
+    end
 
     def self.find_all_by_client_id(client_id)
       data.where(client_id: client_id)

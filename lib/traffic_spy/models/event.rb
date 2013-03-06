@@ -14,14 +14,6 @@ module TrafficSpy
       Event.data.where(name: name).to_a[0]
     end
 
-    def self.create_table
-      Client.database.create_table? :events do
-        primary_key :id
-        String      :name
-        DateTime    :created_at
-      end
-    end
-
     def self.exists?(name)
       Event.find_by_event(name).to_a.count > 0
     end
@@ -44,12 +36,7 @@ module TrafficSpy
     end
 
     def self.data
-      verify_table_exists
-      Client.database.from(:events)
-    end
-
-    def self.verify_table_exists
-      @table_exists ||= (create_table || true)
+      DB.from(:events)
     end
 
     def self.most_events_sorter

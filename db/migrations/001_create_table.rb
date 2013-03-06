@@ -1,10 +1,5 @@
 Sequel.migration do
   change do
-    # create_table(:requests) do
-    #   # primary_key   :id
-    #   # String        :field_1
-    #   # Text          :field_2
-    # end
     create_table :identifiers do
       primary_key :id
       String      :identifier
@@ -27,9 +22,16 @@ Sequel.migration do
       String      :ip
     end
 
+    create_table :events do
+      primary_key :id
+      String      :name
+      DateTime    :created_at
+    end
+
     create_table :campaigns do
       primary_key :id
       String      :name
+      DateTime    :created_at
     end
   end
 end

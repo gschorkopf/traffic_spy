@@ -4,24 +4,17 @@ describe TrafficSpy::Campaign do
 
   let(:app) {TrafficSpy::Campaign}
   let(:cl_app) {TrafficSpy::Client}
+  let(:data) { TrafficSpy::DummyData}
 
   before do
-    TrafficSpy::Client.create_table
-    TrafficSpy::Event.create_table
-    TrafficSpy::Campaign.create_table
-    TrafficSpy::Payload.create_table
-    TrafficSpy::CampaignEvent.create_table
+    data.before
     app.find_or_create('socialSignup',
       ['registrationStep1', 'registrationStep2',
       'registrationStep3', 'registrationStep4'])
   end
 
   after do
-    cl_app.database.drop_table(:events)
-    cl_app.database.drop_table(:payloads)
-    cl_app.database.drop_table(:identifiers)
-    cl_app.database.drop_table(:campaigns)
-    cl_app.database.drop_table(:campaign_events)
+    data.after
   end
 
   describe ".find_or_create" do
@@ -43,12 +36,6 @@ describe TrafficSpy::Campaign do
 
     it "returns false if campaign does not exist" do
       expect(app.exists?('bananaRama')).to be false
-    end
-  end
-
-  describe "verify_table_exists" do
-    it "returns true if the table exists" do
-      expect(app.verify_table_exists).to be true
     end
   end
 
