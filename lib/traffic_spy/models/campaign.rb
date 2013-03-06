@@ -21,7 +21,7 @@ module TrafficSpy
         name:       name,
         identifier: identifier)
       id = Campaign.find_by_name(name)[:id]
-      CampaignEvent.loop_register(identifier, id, 
+      CampaignEvent.loop_register(identifier, id,
         Event.loop_register(event_names))
     end
 

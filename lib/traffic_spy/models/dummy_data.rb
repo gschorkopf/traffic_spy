@@ -1,11 +1,9 @@
 module TrafficSpy
   class DummyData
     def self.before
-      
     end
 
     def self.after
-      
     end
 
     def self.payload_one
@@ -49,7 +47,6 @@ module TrafficSpy
       }
       @payload_three ||= Payload.new(hash, 1)
     end
-    
     #   ### 3 sets client data
     #   def client_setup
     #     client = Client.new(identifier: 'jumpstartlab', rooturl: 'http://jumpstartlab.com')
