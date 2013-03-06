@@ -5,8 +5,8 @@
     <ul>
         <li>
           <% @events.each do |event| %>
-             Event: <strong>"<%= event.first %>"</strong> </br>
-             Recieved: <strong><%= event.last %></strong>x
+             Event: <strong>"<%= event.last %>"</strong> </br>
+             Recieved: <strong><%= event.first %></strong>x
           <% end %>
         </li>
     </ul>
@@ -16,7 +16,7 @@
     <ul>
         <li>
           <% @events.each do |event| %>
-          <a href= "/sources/<%= @source %>/events/<%= event.first %>" target="_blank"<b><%= event.first %></b></a>
+          <a href= "/sources/<%= @source %>/events/<%= event.first %>" target="_blank"<b><%= event.first %></b></a> </br>
           <% end %>
         </li>
     </ul>

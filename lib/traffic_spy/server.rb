@@ -25,6 +25,7 @@ module TrafficSpy
 
       # Entry looks like:
       # curl -i -d 'identifier=jumpstartlab&rootUrl=http://jumpstartlab.com'  http://localhost:9393/sources
+
     end
 
     post '/sources/:identifier/data' do
@@ -34,7 +35,7 @@ module TrafficSpy
       # Client.find_by_identifier
       payload = Payload.new(hash, client_id)
 
-      if payload.empty?
+      if hash == {} || hash == "" || hash == []
         status 400
         "{\"400 Bad Request\":\"payload missing\"}"
       elsif Payload.exists?(payload)
@@ -77,7 +78,6 @@ module TrafficSpy
     get "/sources/:identifier/urls/:path" do
       @identifier = params[:identifier]
       @relative_path = params[:path]
-
       @source = Client.data.where(identifier: @identifier).to_a[0]
 
       if @source == nil || @relative_path == nil
@@ -93,32 +93,29 @@ module TrafficSpy
 
     get "/sources/:identifier/events" do
       @identifier = params[:identifier]
-      @source = params[:identifier]
+
       client_id = Client.data.where(identifier: params[:identifier]).to_a.first[:id]
-      @name = Event.data.select(:name)
+      events = Event.find_all_by_client_id(client_id).inspect
 
-      # if !@source
-      #   "{\"message\":\"No events have been defined.\"}"
-      # else
-
+# if event has not been defined, message no events have been defined
+      if  events.count == 0
+        "{\"message\":\"No events have been defined.\"}"
+        erb :error
+      else
         @events = Event.most_events_sorter
-        # raise @events.inspect
-
         erb :app_events_index
-      # end
+      end
     end
 
     get "/sources/:identifier/events/:name" do
       @identifier = params[:identifier]
       @name = params[:name]
-      @source = Client.data.where(identifier: @identifier).to_a.first[:identifier]
-      @event_id = Event.data.where(name: @name).to_a.first[:id]
+      @event = Event.data.where(name: @name).to_a
 
-      if @event_id == []
+      if @event.count == 0
         "{\"message\":\"No events have been defined.\"}"
-
       else
-        @hourly_events = Event.hourly_events_sorter(@event_id)
+        @hourly_events = Event.hourly_events_sorter(@event.first[:id])
         erb :event_stats
 
       end

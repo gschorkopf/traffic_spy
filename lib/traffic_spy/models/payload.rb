@@ -4,28 +4,20 @@ module TrafficSpy
                   :url,         :requested_at,
                   :responded_in,:referred_by,   :request_type,
                   :user_agent,  :resolution_width,
-                  :resolution_height,  :ip,     :status
+                  :resolution_height,  :ip
 
     def initialize(hash = {}, client_id = nil)
-      if hash == {} || hash == "" || hash == nil
-        @status = :empty
-      else
-        @client_id        = client_id
-        @event_id         = Event.find_or_create(hash["eventName"])
-        @user_agent       = hash["userAgent"]
-        @url              = hash["url"]
-        @requested_at     = hash["requestedAt"]
-        @responded_in     = hash["respondedIn"]
-        @referred_by      = hash["referredBy"]
-        @request_type     = hash["requestType"]
-        @resolution_width = hash["resolutionWidth"]
-        @resolution_height= hash["resolutionHeight"]
-        @ip               = hash["ip"]
-      end
-    end
-
-    def empty?
-      status == :empty
+      @client_id        = client_id
+      @event_id         = Event.find_or_create(hash["eventName"])
+      @user_agent       = hash["userAgent"]
+      @url              = hash["url"]
+      @requested_at     = hash["requestedAt"]
+      @responded_in     = hash["respondedIn"]
+      @referred_by      = hash["referredBy"]
+      @request_type     = hash["requestType"]
+      @resolution_width = hash["resolutionWidth"]
+      @resolution_height= hash["resolutionHeight"]
+      @ip               = hash["ip"]
     end
 
     def self.exists?(payload)
@@ -38,7 +30,6 @@ module TrafficSpy
 
     def commit
       Payload.data.insert(
-        id: id,
         client_id: client_id,
         event_id: event_id,
         user_agent: user_agent,
