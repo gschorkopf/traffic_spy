@@ -1,10 +1,11 @@
 module TrafficSpy
   class Campaign
-    def self.find_or_create(name, event_names)
-      # For traffic_spy.rb, put Campaign.find_or_create(params(campaignName), params(eventNames))
-      Campaign.register(name)
-      Event.loop_register(event_names) #array of event ids
-      # Campaign.find_by_name(name)[:id] <-campaign id
+    attr_accessor :name, :identifier, :event_names
+
+    def initialize(identifier, params)
+      @name         = params['campaignName']
+      @event_names  = params['eventNames']
+      @identifier   = identifier
     end
 
     def self.find_by_name(name)
@@ -15,8 +16,11 @@ module TrafficSpy
       Campaign.find_by_name(name).to_a.count > 0
     end
 
-    def self.register(name)
-      Campaign.data.insert(name: name)
+    def register
+      Campaign.data.insert(
+        name:       name,
+        identifier: identifier
+        )
     end
 
     def self.data

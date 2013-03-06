@@ -1,6 +1,9 @@
 module TrafficSpy
   class CampaignEvent
 
+# Event.loop_register(event_names) #array of event ids
+# Campaign.find_by_name(name)[:id] <-campaign id
+
 #     def self.register(name)
 #       CampaignEvent.data.insert(name: name)
 #       ###
