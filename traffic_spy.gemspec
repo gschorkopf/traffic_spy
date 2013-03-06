@@ -6,10 +6,10 @@ require 'traffic_spy/version'
 Gem::Specification.new do |gem|
   gem.name          = "traffic_spy"
   gem.version       = TrafficSpy::VERSION
-  gem.authors       = [""]
-  gem.email         = [""]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.authors       = ["Geoffrey Schorkopf", "Bradley Sheehan"]
+  gem.email         = ["gschorkopf@gmail.com"]
+  gem.description   = %q{TrafficSpy commits payloads, events, and campaign details and relays them back in a pretty way.}
+  gem.summary       = %q{See description.}
   gem.homepage      = ""
   gem.license       = "MIT"
 
