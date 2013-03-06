@@ -38,7 +38,6 @@ module TrafficSpy
 
     def commit
       Payload.data.insert(
-        id: id,
         client_id: client_id,
         event_id: event_id,
         user_agent: user_agent,
