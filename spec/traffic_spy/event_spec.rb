@@ -54,8 +54,9 @@ describe TrafficSpy::Event do
   end
 
   describe ".most_events_sorter" do
-    it "returns list of events from most received to least" do
-      expect(app.most_events_sorter.first.first).to eq 'socialLogin'
+    it "returns list of events from most received to least for given payloads" do
+      events = app.find_all_by_client_id(1)
+      expect(app.most_events_sorter(events).first.first).to eq 'socialLogin'
     end
   end
 
@@ -65,6 +66,12 @@ describe TrafficSpy::Event do
       hour_breakdown = app.hourly_events_sorter(event_id)
       expect(hour_breakdown.first.first).to eq 21
       expect(hour_breakdown.first.last).to eq 1
+    end
+  end
+
+  describe ".find_all_by_client_id" do
+    it "returns all events given a client id" do
+      expect(app.find_all_by_client_id(1).first[:name]).to eq 'socialLogin'
     end
   end
 

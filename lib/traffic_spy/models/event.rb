@@ -14,6 +14,15 @@ module TrafficSpy
       Event.data.where(name: name).to_a[0]
     end
 
+    def self.find_all_by_client_id(client_id)
+      client_payloads = Payload.data.where(client_id: client_id)
+      event_ids = client_payloads.collect {|payload| payload[:event_id] }
+      events = event_ids.collect do |id|
+        Event.data.where(id: id).to_a
+      end
+      events.first
+    end
+
     def self.exists?(name)
       Event.find_by_name(name).to_a.count > 0
     end
@@ -39,9 +48,9 @@ module TrafficSpy
       DB.from(:events)
     end
 
-    def self.most_events_sorter
+    def self.most_events_sorter(payloads)
       event_hash = Hash.new(0)
-      Event.data.collect {|event| event[:name]}.each do |name|
+      payloads.collect {|event| event[:name]}.each do |name|
        event_hash[name] += 1
       end
       event_hash.sort_by {|name, hits| hits}.reverse
