@@ -1,4 +1,6 @@
 ENV["TRAFFIC_SPY_ENV"] ||= "test"
+
+Bundler.require
 require 'traffic_spy'
 
 
@@ -13,12 +15,12 @@ RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
   config.filter_run :focus
 
-  # config.around(:each) do |example|
-  #   DB.transaction do
-  #     example.run
-  #     raise Sequel::Error::Rollback
-  #   end
-  # end
+  config.around(:each) do |example|
+    TrafficSpy::DB.transaction do
+      example.run
+      raise Sequel::Error::Rollback
+    end
+  end
 
   # Run specs in random order to surface order dependencies. If you find an
   # order dependency and want to debug it, you can fix the order by providing
