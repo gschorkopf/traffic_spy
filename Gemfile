@@ -15,6 +15,8 @@ group :development do
   gem 'useragent'
   gem 'simplecov'
   gem 'cane'
+  gem 'reek'
+  gem 'rake'
 end
 
 group :evaluations do
