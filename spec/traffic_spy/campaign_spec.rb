@@ -8,29 +8,28 @@ describe TrafficSpy::Campaign do
 
   before do
     data.before
-    app.find_or_create('socialSignup',
+    hash = {'campaignName' => 'socialSignup',
+      'eventNames' =>
       ['registrationStep1', 'registrationStep2',
-      'registrationStep3', 'registrationStep4'])
+      'registrationStep3', 'registrationStep4']}
+    @campaign = app.new('jumpstartlab', hash)
   end
 
   after do
     data.after
   end
 
-  describe ".find_or_create" do
-    it "returns an array of old or new event_ids" do
-      expect(app.find_or_create('socialSignup',
-      ['registrationStep1', 'registrationStep2',
-      'registrationStep3', 'registrationStep4'])).to eq [1,2,3,4]
-    end
-
-    it "creates a new campaign" do
-      expect(app.find_by_name('socialSignup')[:name]).to eq 'socialSignup'
+  describe "initialize stores variables" do
+    it "stores a hash of data and identifier from post" do
+      expect(@campaign.name).to eq 'socialSignup'
+      expect(@campaign.identifier).to eq 'jumpstartlab'
+      expect(@campaign.event_names[1]).to eq 'registrationStep2'
     end
   end
 
   describe ".exists?" do
     it "returns true if campaign already exists" do
+      @campaign.register
       expect(app.exists?('socialSignup')).to be true
     end
 
@@ -39,10 +38,25 @@ describe TrafficSpy::Campaign do
     end
   end
 
-  describe ".register" do
+  describe "#register" do
     it "registers a new campaign name" do
-      app.register('bananaRama')
-      expect(app.find_by_name('bananaRama')[:name]).to eq "bananaRama"
+      @campaign.register
+      expect(app.find_by_name('socialSignup')[:name]).to eq "socialSignup"
+    end
+
+    it "registers a campaign with identifier" do
+      @campaign.register
+      expect(app.find_by_name('socialSignup')[:identifier]).to eq "jumpstartlab"
+    end
+  end
+
+  describe ".campaign_event_sorter" do
+    it "sorts campaign events from most to least received for given campaign name" do
+      @campaign.register
+      expect(app.campaign_event_sorter('socialSignup')).to eq [["registrationStep4", 1],
+          ["registrationStep3", 1],
+          ["registrationStep2", 1],
+          ["registrationStep1", 1]]
     end
   end
 

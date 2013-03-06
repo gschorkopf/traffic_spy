@@ -31,7 +31,15 @@ Sequel.migration do
     create_table :campaigns do
       primary_key :id
       String      :name
+      String      :identifier
       DateTime    :created_at
+    end
+
+    create_table :campaign_events do
+      primary_key :id
+      foreign_key :event_id
+      foreign_key :campaign_id
+      String      :identifier
     end
   end
 end

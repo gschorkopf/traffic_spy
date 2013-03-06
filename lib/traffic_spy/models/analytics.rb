@@ -1,6 +1,5 @@
 module TrafficSpy
   module Analytics
-    
     # def self.url_sorter(payloads)
     #   url_hash = Hash.new(0)
     #   payloads.collect {|payload| payload[:url]}.each do |url|
@@ -62,6 +61,5 @@ module TrafficSpy
 
     #   paths.collect {|path| path[:responded_in]}.sort.reverse
     # end
-    
   end
 end

@@ -1,10 +1,11 @@
 module TrafficSpy
   class Campaign
-    def self.find_or_create(name, event_names)
-      # For traffic_spy.rb, put Campaign.find_or_create(params(campaignName), params(eventNames))
-      Campaign.register(name)
-      Event.loop_register(event_names) #array of event ids
-      # Campaign.find_by_name(name)[:id] <-campaign id
+    attr_accessor :name, :identifier, :event_names
+
+    def initialize(identifier, params)
+      @name         = params['campaignName']
+      @event_names  = params['eventNames']
+      @identifier   = identifier
     end
 
     def self.find_by_name(name)
@@ -15,13 +16,30 @@ module TrafficSpy
       Campaign.find_by_name(name).to_a.count > 0
     end
 
-    def self.register(name)
-      Campaign.data.insert(name: name)
+    def register
+      Campaign.data.insert(
+        name:       name,
+        identifier: identifier)
+      id = Campaign.find_by_name(name)[:id]
+      CampaignEvent.loop_register(identifier, id,
+        Event.loop_register(event_names))
     end
 
     def self.data
       DB.from(:campaigns)
     end
+
+    def self.campaign_event_sorter(name)
+      id = Campaign.find_by_name(name)[:id]
+      ces = CampaignEvent.find_all_by_campaign_id(id)
+
+      ces_hash = Hash.new(0)
+      ces.collect {|ces| ces[:event_id]}.each do |id|
+        ces_hash[Event.find_by_id(id)] += 1
+      end
+      ces_hash.sort_by {|ces, hits| hits}.reverse
+    end
+
 
   end
 end

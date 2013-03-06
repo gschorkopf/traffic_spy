@@ -14,6 +14,11 @@ module TrafficSpy
       Event.data.where(name: name).to_a[0]
     end
 
+    def self.find_by_id(id)
+      #untested
+      Event.data.where(id: id).to_a[0][:name]
+    end
+
     def self.find_all_by_client_id(client_id)
       client_payloads = Payload.data.where(client_id: client_id)
       event_ids = client_payloads.collect {|payload| payload[:event_id] }
