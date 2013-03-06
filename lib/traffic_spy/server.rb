@@ -49,8 +49,8 @@ module TrafficSpy
     end
 
     get '/sources/:identifier' do
-      # @client = Client.find_by_identifier(params[:identifier])
-      @source = Client.data.where(identifier: params[:identifier]).to_a.first[:identifier]
+      @identifier = params[:identifier]
+      @source = Client.data.where(identifier: @identifier).to_a.first[:identifier]
       # raise @source.inspect
 
       if @source == ""
@@ -78,9 +78,9 @@ module TrafficSpy
     get "/sources/:identifier/urls/:path" do
       @identifier = params[:identifier]
       @relative_path = params[:path]
-      @source = Client.data.where(identifier: @identifier).to_a[0]
+      @source = Client.find_by_identifier(params[:identifier])
 
-      if @source == nil || @relative_path == nil
+      if @source == 0 || @relative_path == nil
         erb :error
       else
         path = "/#{@relative_path}"
@@ -93,22 +93,31 @@ module TrafficSpy
 
     get "/sources/:identifier/events" do
       @identifier = params[:identifier]
-
-      client_id = Client.data.where(identifier: params[:identifier]).to_a.first[:id]
-      events = Event.find_all_by_client_id(client_id).inspect
-
-# if event has not been defined, message no events have been defined
-      if  events.count == 0
-        "{\"message\":\"No events have been defined.\"}"
+      assoc_client = Client.find_by_identifier(@identifier).first
+      if assoc_client.count == 0
         erb :error
       else
-        @events = Event.most_events_sorter
-        erb :app_events_index
+        client_id =  assoc_client.last
+        events_to_use = Event.find_all_by_client_id(client_id)
+
+        if events_to_use.to_a.count == 0
+          "{\"message\":\"No events have been defined.\"}"
+          erb :error
+        else
+          @events = Event.most_events_sorter(events_to_use)
+
+          erb :app_events_index
+        end
       end
     end
 
     get "/sources/:identifier/events/:name" do
       @identifier = params[:identifier]
+      # raise @identifier.inspect
+
+      @source = Client.data.where(identifier: @identifier).to_a
+      # raise @source.inspect
+
       @name = params[:name]
       @event = Event.data.where(name: @name).to_a
 

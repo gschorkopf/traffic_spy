@@ -12,6 +12,11 @@ module TrafficSpy
       data.where(id: client_id).to_a.first[:rooturl]
     end
 
+    def self.find_by_identifier(identifier)
+      #untested!
+      data.where(identifier: identifier).to_a.first
+    end
+
     def missing?
       self.identifier == "" || self.identifier.nil? ||
       self.rooturl == "" || self.rooturl.nil?
@@ -20,6 +25,10 @@ module TrafficSpy
     def self.exists?(client)
       Client.data.where(identifier: client.identifier).count > 0
     end
+
+    # def valid?
+      # identifier && rooturl
+    # end
 
     def self.data
       DB.from(:identifiers)
