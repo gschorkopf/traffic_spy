@@ -13,6 +13,7 @@ group :development do
   gem 'sqlite3'
   gem 'json'
   gem 'useragent'
+  gem 'simplecov'
 end
 
 group :evaluations do
