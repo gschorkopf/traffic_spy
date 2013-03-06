@@ -58,16 +58,6 @@ describe TrafficSpy::Payload do
     end
   end
 
-  describe "#empty?" do
-    it "returns true if payload is an empty hash" do
-      expect(@empty_payload.empty?).to eq true
-    end
-
-    it "return false if payload is an at least partially full hash" do
-      expect(@p1.empty?).to eq false
-    end
-  end
-
   describe ".exists?" do
     it "returns true if payload exists in :payloads" do
       @p1.commit
