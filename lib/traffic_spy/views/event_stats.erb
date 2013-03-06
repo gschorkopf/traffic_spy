@@ -1,0 +1,14 @@
+<h1>Event Details</h1>
+  &nbsp
+  &nbsp
+  &nbsp
+<h3>Hour by Hour Breakdown</h3>
+    <ul>
+        <li>
+          <% @hourly_events.each do |event| %>
+             Hour: <strong><%= event.first %></strong> </br>
+             Hits: <strong><%= event.last %></strong>x </br>
+             Event: <strong>"<%= @name %>"</strong> </br>
+          <% end %>
+        </li>
+    </ul>
