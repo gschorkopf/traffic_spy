@@ -3,19 +3,19 @@ module TrafficSpy
 
     def self.find_or_create(name)
       if Event.exists?(name)
-        Event.find_by_event(name)[:id]
+        Event.find_by_name(name)[:id]
       else
         Event.register(name)
-        Event.find_by_event(name)[:id]
+        Event.find_by_name(name)[:id]
       end
     end
 
-    def self.find_by_event(name)
+    def self.find_by_name(name)
       Event.data.where(name: name).to_a[0]
     end
 
     def self.exists?(name)
-      Event.find_by_event(name).to_a.count > 0
+      Event.find_by_name(name).to_a.count > 0
     end
 
     def self.loop_register(events)

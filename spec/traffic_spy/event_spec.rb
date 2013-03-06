@@ -31,9 +31,9 @@ describe TrafficSpy::Event do
     data.after
   end
 
-  describe ".find_by_event" do
+  describe ".find_by_name" do
     it "finds the first instance of an event given the event name" do
-      expect(app.find_by_event("socialLogin")[:id]).to eq 1
+      expect(app.find_by_name("socialLogin")[:id]).to eq 1
     end
   end
 
@@ -61,7 +61,7 @@ describe TrafficSpy::Event do
 
   describe ".hourly_events_sorter" do
     it "returns hourly breakdown of particular event creation dates" do
-      event_id = app.find_by_event('socialLogin')[:id]
+      event_id = app.find_by_name('socialLogin')[:id]
       hour_breakdown = app.hourly_events_sorter(event_id)
       expect(hour_breakdown.first.first).to eq 21
       expect(hour_breakdown.first.last).to eq 1
