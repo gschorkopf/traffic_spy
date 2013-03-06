@@ -14,6 +14,7 @@ group :development do
   gem 'json'
   gem 'useragent'
   gem 'simplecov'
+  gem 'cane'
 end
 
 group :evaluations do
