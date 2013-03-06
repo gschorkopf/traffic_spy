@@ -1,8 +1,22 @@
-<h3>Events: Aggregate Data</h3>
+<h1>Events</h1>
+    &nbsp
+    &nbsp
+<h3>Aggregate Data</h3>
     <ul>
         <li>
           <% @events.each do |event| %>
-             <%= event %>
+             Event: <strong>"<%= event.first %>"</strong> </br>
+             Recieved: <strong><%= event.last %></strong>x
+          <% end %>
+        </li>
+    </ul>
+    &nbsp
+    &nbsp
+<h3>Event Specific Data</h3>
+    <ul>
+        <li>
+          <% @events.each do |event| %>
+          <a href= "/sources/<%= @source %>/events/<%= event.first %>" target="_blank"<b><%= event.first %></b></a>
           <% end %>
         </li>
     </ul>

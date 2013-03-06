@@ -36,7 +36,6 @@ module TrafficSpy
       # Client.find_by_identifier
       payload = Payload.new(hash, client_id)
 
-
       if payload.empty?
         status 400
         "{\"400 Bad Request\":\"payload missing\"}"
@@ -48,9 +47,6 @@ module TrafficSpy
         status 200
         "{\"200 Success\":\"unique payload confirmed\"}"
       end
-
-      # Entry looks like:
-      # curl -i -d 'payload={"url":"http://jumpstartlab.com/blog","requestedAt":"2013-02-16 21:38:28 -0700"}'  http://localhost:9393/sources/jumpstartlab/data
     end
 
     get '/sources/:identifier' do
@@ -99,38 +95,36 @@ module TrafficSpy
 
     get "/sources/:identifier/events" do
       @identifier = params[:identifier]
-      @source = Client.data.where(identifier: @identifier).to_a.first[:identifier]
-      # raise @source.inspect
+      @source = params[:identifier]
+      client_id = Client.data.where(identifier: params[:identifier]).to_a.first[:id]
+      @name = Event.data.select(:name)
 
       # if !@source
       #   "{\"message\":\"No events have been defined.\"}"
       # else
 
-      # find events that match the source (i.e. "jumpstartlab")
         @events = Event.most_events_sorter
         # raise @events.inspect
 
         erb :app_events_index
-      # sa
+      # end
     end
 
-    # get "/sources/:identifier/events/:eventname" do
-    #   @identifier = params[:identifier]
-    #   @name = params[:name]
-    #   @source = Client.data.where(identifier: @identifier).to_a.first[:identifier]
-    #   # raise @source.inspect
+    get "/sources/:identifier/events/:name" do
+      @identifier = params[:identifier]
+      @name = params[:name]
+      @source = Client.data.where(identifier: @identifier).to_a.first[:identifier]
+      @event_id = Event.data.where(name: @name).to_a.first[:id]
 
-    #   # if #no event with the given name has been defined
-    #   #   "{\"message\":\"No events have been defined.\"}"
-    #   # else
+      if @event_id == []
+        "{\"message\":\"No events have been defined.\"}"
 
-    #   # find events that match the source (i.e. "jumpstartlab")
-    #     @events = Event.most_events_sorter
-    #     # raise @events.inspect
+      else
+        @hourly_events = Event.hourly_events_sorter(@event_id)
+        erb :event_stats
 
-    #     erb :app_events_index
-    #   # sa
-    # end
+      end
+    end
 
   end
 end
