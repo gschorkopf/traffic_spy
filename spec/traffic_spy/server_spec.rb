@@ -169,6 +169,13 @@ describe TrafficSpy::Server do
       end
     end
 
+    describe "index file" do
+      it "returns an error" do
+        get '/'
+        expect(last_response.body.downcase).to include("has not been requested")
+      end
+    end
+
 
 
 
