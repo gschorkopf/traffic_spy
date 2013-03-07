@@ -8,7 +8,8 @@ describe TrafficSpy::Payload do
 
   before do
     data.before
-    @client = cl_app.new(identifier: 'jumpstartlab', rooturl: 'http://jumpstartlab.com')
+    @client = cl_app.new(identifier: 'jumpstartlab',
+                         rooturl: 'http://jumpstartlab.com')
     @client.save
     @p1 = data.payload_one
     @p2 = data.payload_two
@@ -29,7 +30,6 @@ describe TrafficSpy::Payload do
       expect(@p1.responded_in).to eq 37
       expect(@p1.referred_by).to eq "http://jumpstartlab.com"
       expect(@p1.request_type).to eq "GET"
-      expect(@p1.user_agent).to eq "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17"
       expect(@p1.resolution_width).to eq "1920"
       expect(@p1.resolution_height).to eq "1280"
       expect(@p1.ip).to eq "63.29.38.211"
@@ -45,7 +45,8 @@ describe TrafficSpy::Payload do
 
   describe ".get_path" do
     it "returns the path for the url parameter" do
-      path = app.get_path("http://jumpstartlab.com/gschool/", "http://jumpstartlab.com")
+      path = app.get_path("http://jumpstartlab.com/gschool/",
+                          "http://jumpstartlab.com")
       expect(path).to eq "/gschool/"
     end
   end
@@ -76,7 +77,8 @@ describe TrafficSpy::Payload do
         @p2.commit
         @p3.commit
         payloads = app.find_all_by_client_id(1)
-        expect(app.url_sorter(payloads).to_a.first.first).to eq "http://jumpstartlab.com/gschool"
+        url_list = app.url_sorter(payloads)
+        expect(url_list.first.first).to eq "http://jumpstartlab.com/gschool"
       end
     end
 
@@ -111,13 +113,14 @@ describe TrafficSpy::Payload do
     end
 
     describe ".avg_response_times" do
-      it "outputs longest, average response time per URL to shortest, average response time per URL" do
+      it "outputs longest, avg response time per URL to shortest per URL" do
         @p1.commit
         @p2.commit
         @p3.commit
         payloads = app.find_all_by_client_id(1)
-        expect(app.avg_response_times(payloads).first.first).to eq "http://jumpstartlab.com/blog"
-        expect(app.avg_response_times(payloads).first.last).to eq 37
+        top_resp = app.avg_response_times(payloads).first
+        expect(top_resp.first).to eq "http://jumpstartlab.com/blog"
+        expect(top_resp.last).to eq 37
       end
     end
 

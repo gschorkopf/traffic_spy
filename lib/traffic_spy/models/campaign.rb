@@ -12,15 +12,23 @@ module TrafficSpy
       Campaign.data.where(name: name).to_a[0]
     end
 
+    def self.find_all_by_identifier(identifier)
+      data.where(identifier: identifier).to_a
+    end
+
+    def missing?
+      self.event_names == "" || self.event_names.nil? ||
+      self.name == "" || self.name.nil?
+    end
+
     def self.exists?(name)
       Campaign.find_by_name(name).to_a.count > 0
     end
 
     def register
-      Campaign.data.insert(
-        name:       name,
-        identifier: identifier)
-      id = Campaign.find_by_name(name)[:id]
+      id = Campaign.data.insert(name: name,
+                                identifier: identifier)
+
       CampaignEvent.loop_register(identifier, id,
         Event.loop_register(event_names))
     end

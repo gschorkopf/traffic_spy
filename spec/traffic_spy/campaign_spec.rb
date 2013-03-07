@@ -8,11 +8,15 @@ describe TrafficSpy::Campaign do
 
   before do
     data.before
-    hash = {'campaignName' => 'socialSignup',
+    @hash = {'campaignName' => 'socialSignup',
       'eventNames' =>
       ['registrationStep1', 'registrationStep2',
       'registrationStep3', 'registrationStep4']}
-    @campaign = app.new('jumpstartlab', hash)
+    @campaign = app.new('jumpstartlab', @hash)
+    @bad_hash = {'campaignName' => '',
+      'eventNames' =>
+      ['registrationStep1', 'registrationStep2',
+      'registrationStep3', 'registrationStep4']}
   end
 
   after do
@@ -27,6 +31,16 @@ describe TrafficSpy::Campaign do
     end
   end
 
+  describe "#missing?" do
+    it "returns true if parameters are missing" do
+      expect(app.new('jumpstartlab', @bad_hash).missing?).to be true
+    end
+
+    it "returns false if parameters are present" do
+      expect(@campaign.missing?).to be false
+    end
+  end
+
   describe ".exists?" do
     it "returns true if campaign already exists" do
       @campaign.register
@@ -35,6 +49,14 @@ describe TrafficSpy::Campaign do
 
     it "returns false if campaign does not exist" do
       expect(app.exists?('bananaRama')).to be false
+    end
+  end
+
+  describe ".find_all_by_identifier" do
+    it "returns all campaigns by identifier" do
+      @campaign.register
+      campaigns = app.find_all_by_identifier('jumpstartlab')
+      expect(campaigns.count).to eq 1
     end
   end
 
@@ -51,9 +73,10 @@ describe TrafficSpy::Campaign do
   end
 
   describe ".campaign_event_sorter" do
-    it "sorts campaign events from most to least received for given campaign name" do
+    it "sorts campaign events from most to least received" do
       @campaign.register
-      expect(app.campaign_event_sorter('socialSignup')).to eq [["registrationStep4", 1],
+      event_list = app.campaign_event_sorter('socialSignup')
+      expect(event_list).to eq [["registrationStep4", 1],
           ["registrationStep3", 1],
           ["registrationStep2", 1],
           ["registrationStep1", 1]]

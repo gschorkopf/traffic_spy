@@ -13,7 +13,6 @@ module TrafficSpy
     end
 
     def self.find_by_identifier(identifier)
-      #untested!
       data.where(identifier: identifier).to_a.first
     end
 
