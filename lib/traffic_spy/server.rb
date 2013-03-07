@@ -43,10 +43,11 @@ module TrafficSpy
 
     get '/sources/:identifier' do
       @identifier = params[:identifier]
-      @source = Client.data.where(identifier: @identifier).to_a.first[:identifier]
+      @source = Client.data.where(identifier: @identifier).to_a.first
 
-      if @source == ""
-        erb :error_400
+      if @source.nil?
+        erb :error_404
+        status 404
       else
         client_id = Client.data.where(identifier: params[:identifier]).to_a.first[:id]
         @rooturl = Client.data.where(identifier: params[:identifier]).to_a.first[:rooturl]
@@ -66,13 +67,15 @@ module TrafficSpy
 
     end
 
-    get "/sources/:identifier/urls/:path" do
+    get "/sources/:identifier/urls/*" do
+      # Added splat.  Might explode!!
       @identifier = params[:identifier]
-      @relative_path = params[:path]
+      @relative_path = params[:splat]
       @source = Client.find_by_identifier(params[:identifier])
 
       if @source == 0 || @relative_path == nil
         erb :error
+        status 404
       else
         path = "/#{@relative_path}"
         payloads_to_use = Payload.find_all_by_path(path)
@@ -120,12 +123,6 @@ module TrafficSpy
 
       end
     end
-
-
-
-
-
-
 
     post "/sources/:identifier/campaigns" do
       identifier = params[:identifier]

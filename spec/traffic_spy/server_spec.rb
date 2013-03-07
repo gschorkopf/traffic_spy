@@ -52,7 +52,8 @@ describe TrafficSpy::Server do
           "requestType"      => "GET",
           "parameters"       => [],
           "eventName"        => "socialLogin",
-          "userAgent"        => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17",
+          "userAgent"        => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2)"+
+          " AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17",
           "resolutionWidth"  => "1920",
           "resolutionHeight" => "1280",
           "ip"               => "63.29.38.211"}.to_json
@@ -60,7 +61,8 @@ describe TrafficSpy::Server do
 
       before do
         if TrafficSpy::Client.find_by_identifier("jumpstartlab").nil?
-          client = TrafficSpy::Client.new(:identifier => "jumpstartlab", :rooturl => "http://jumpstartlab.com")
+          client = TrafficSpy::Client.new(:identifier => "jumpstartlab",
+                                    :rooturl => "http://jumpstartlab.com")
           client.save
         end
       end
@@ -78,7 +80,25 @@ describe TrafficSpy::Server do
     end
   end
 
-  describe " " do
+  describe "/sources/:identifier" do
+
+    context "when identifier does not exist" do
+
+      it "gives an error message that identifier does not exist" do
+        get '/sources/newbelgium'
+        expect(last_response.status).to eq 404
+      end
+    end
+  end
+
+  describe "/sources/:identifier/urls/*" do
+    context "when the url for the identifier does not exist" do
+      it "gives an error message that url does not exist for identifier" do
+        get '/sources/:identifier/urls/*'
+        expect(last_response.status).to eq 404
+      end
+
+    end
 
 
   end
