@@ -70,10 +70,10 @@ module TrafficSpy
     get "/sources/:identifier/urls/*" do
       # Added splat.  Might explode!!
       @identifier = params[:identifier]
-      @relative_path = params[:splat]
+      payloads = Payload.find_all_by_path(params[:splat]).to_a
       @source = Client.find_by_identifier(params[:identifier])
 
-      if @source == 0 || @relative_path == nil
+      if @source.nil? || payloads.nil?
         erb :error
         status 404
       else

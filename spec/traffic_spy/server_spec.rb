@@ -81,9 +81,7 @@ describe TrafficSpy::Server do
   end
 
   describe "/sources/:identifier" do
-
     context "when identifier does not exist" do
-
       it "gives an error message that identifier does not exist" do
         get '/sources/newbelgium'
         expect(last_response.status).to eq 404
@@ -94,10 +92,35 @@ describe TrafficSpy::Server do
   describe "/sources/:identifier/urls/*" do
     context "when the url for the identifier does not exist" do
       it "gives an error message that url does not exist for identifier" do
-        get '/sources/:identifier/urls/*'
+        get '/sources/jumpstartlab/urls/sports'
         expect(last_response.status).to eq 404
       end
+    end
 
+    context "when the params exist" do
+      let(:payload) do
+          {"url"              => "http://jumpstartlab.com/blog/banana",
+          "requestedAt"      => "2013-02-16 21:38:28 -0700",
+          "respondedIn"      => 37,
+          "referredBy"       => "http://jumpstartlab.com",
+          "requestType"      => "GET",
+          "parameters"       => [],
+          "eventName"        => "socialLogin",
+          "userAgent"        => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2)"+
+          " AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17",
+          "resolutionWidth"  => "1920",
+          "resolutionHeight" => "1280",
+          "ip"               => "63.29.38.211"}.to_json
+      end
+
+      it "gives us all of the information about that url" do
+        post "/sources", {"identifier" => 'jumpstartlab',
+                        "rootUrl" => 'http://jumpstartlab.com'}
+        post "/sources/jumpstartlab/data", payload: payload
+        get "/sources/jumpstartlab/urls/blog/banana"
+        expect(last_response.status).to eq 200
+        expect(last_response.body).to include("URL Specific Data")
+      end
     end
 
 
