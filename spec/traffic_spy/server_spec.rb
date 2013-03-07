@@ -204,7 +204,37 @@ describe TrafficSpy::Server do
       end
     end
 
+    describe "get /sources/:identifier/events/:name" do
+      context "event name does not exist for identifier" do
+        it "returns an error message" do
+          get "/sources/jumpstartlab/events/mouseClick"
+          expect(last_response.body.downcase).to include("no events have been defined")
+        end
+      end
 
-
+      context "event name does exist for identifier" do
+        let(:payload) do
+          {"url"              => "http://jumpstartlab.com/blog",
+          "requestedAt"      => "2013-02-16 21:38:28 -0700",
+          "respondedIn"      => 37,
+          "referredBy"       => "http://jumpstartlab.com",
+          "requestType"      => "GET",
+          "parameters"       => [],
+          "eventName"        => "socialLogin",
+          "userAgent"        => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2)"+
+          " AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17",
+          "resolutionWidth"  => "1920",
+          "resolutionHeight" => "1280",
+          "ip"               => "63.29.38.211"}.to_json
+        end
+        it "returns the event page with event data" do
+          post "/sources", {"identifier" => 'jumpstartlab',
+            "rootUrl" => 'http://jumpstartlab.com'}
+          post '/sources/jumpstartlab/data', payload: payload
+          get "/sources/jumpstartlab/events/socialLogin"
+          expect(last_response.body).to include("Hour Breakdown")
+        end
+      end
+    end
 
 end
