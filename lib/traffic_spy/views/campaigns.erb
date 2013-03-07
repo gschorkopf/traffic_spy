@@ -3,7 +3,7 @@
     <ul>
           <% @events.each do |event| %>
           <li>
-          <%= event.first %> has received <%= event.last %> hits.
+          <a href="/sources/<%=@identifier%>/events/<%= event.first %>"><%= event.first %></a> has received <%= event.last %> hits.
           </li>
           <% end %>
     </ul>

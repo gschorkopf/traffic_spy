@@ -155,7 +155,7 @@ module TrafficSpy
       client_count = Client.data.where(identifier: @identifier).count
 
       unless Campaign.exists?(@name) && client_count > 0
-         erb :error
+         erb :error_with_campaign_index
       else
         @events = Campaign.campaign_event_sorter(@name)
         erb :campaigns
