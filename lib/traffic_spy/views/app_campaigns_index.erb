@@ -1,0 +1,8 @@
+<h3>Campaigns Available</h3>
+    <h4><%= @identifier %>'s campaigns:<h4>
+    <ul>
+          <% @campaigns.each do |campaign| %>
+          <li>
+          <a href= "/sources/<%= @identifier %>/campaigns/<%= campaign[:name] %>" target="_blank"<b><%= campaign[:name] %></b></a></li>
+          <% end %>
+    </ul>

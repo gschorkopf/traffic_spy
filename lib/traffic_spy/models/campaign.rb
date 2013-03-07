@@ -12,6 +12,10 @@ module TrafficSpy
       Campaign.data.where(name: name).to_a[0]
     end
 
+    def self.find_all_by_identifier(identifier)
+      data.where(identifier: identifier).to_a
+    end
+
     def missing?
       self.event_names == "" || self.event_names.nil? ||
       self.name == "" || self.name.nil?

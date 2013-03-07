@@ -1,0 +1,9 @@
+<h3>Campaign specific data</h3>
+    <h4><%= @name %>'s events:<h4>
+    <ul>
+          <% @events.each do |event| %>
+          <li>
+          <%= event.first %> has received <%= event.last %> hits.
+          </li>
+          <% end %>
+    </ul>

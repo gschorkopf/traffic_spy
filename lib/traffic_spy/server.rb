@@ -141,6 +141,7 @@ module TrafficSpy
       hash = {"campaignName" => params["campaignName"], 
               "eventNames" => params["eventNames"]}
       campaign = Campaign.new(identifier, hash)
+
       if campaign.missing?
         status 400
         "{\"400 Bad Request\":\"params missing\"}"
@@ -152,7 +153,29 @@ module TrafficSpy
         status 200
         "{\"identifier\":\"jumpstartlab\"}"
       end
-      # curl -i -d 'campaignName=socialSignup&eventNames[]=addedSocialThroughPromptA&eventNames[]=addedSocialThroughPromptB'  http://localhost:9393/sources/IDENTIFIER/campaigns
+      #Example: curl -i -d 'campaignName=socialSignup&eventNames[]=addedSocialThroughPromptA&eventNames[]=addedSocialThroughPromptB'  http://localhost:9393/sources/IDENTIFIER/campaigns
+    end
+
+    get "/sources/:identifier/campaigns" do
+      @identifier = params[:identifier]
+      if Client.find_by_identifier(@identifier).count == 0 || Campaign.find_all_by_identifier(@identifier).count == 0
+        erb :error
+      else
+        @campaigns = Campaign.find_all_by_identifier(@identifier)
+        erb :app_campaigns_index
+      end
+    end
+
+    get "/sources/:identifier/campaigns/:campaignname" do
+      @identifier = params[:identifier]
+      @name = params[:campaignname]
+
+      unless Campaign.exists?(@name) && Client.data.where(identifier: @identifier).count > 0
+         erb :error
+      else
+        @events = Campaign.campaign_event_sorter(@name)
+        erb :campaigns
+      end
     end
 
   end

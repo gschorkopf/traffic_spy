@@ -52,6 +52,14 @@ describe TrafficSpy::Campaign do
     end
   end
 
+  describe ".find_all_by_identifier" do
+    it "returns all campaigns by identifier" do
+      @campaign.register
+      campaigns = app.find_all_by_identifier('jumpstartlab')
+      expect(campaigns.count).to eq 1
+    end
+  end
+
   describe "#register" do
     it "registers a new campaign name" do
       @campaign.register
