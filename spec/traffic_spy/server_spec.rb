@@ -81,12 +81,20 @@ describe TrafficSpy::Server do
   end
 
   describe "/sources/:identifier" do
-
     context "when identifier does not exist" do
-
       it "gives an error message that identifier does not exist" do
         get '/sources/newbelgium'
         expect(last_response.status).to eq 404
+      end
+    end
+
+    context "when identifier does exist" do
+      it "gives all information about that identifier" do
+        post "/sources", {"identifier" => 'jumpstartlab',
+                    "rootUrl" => 'http://jumpstartlab.com'}
+        get "/sources/jumpstartlab"
+        expect(last_response.status).to eq 200
+        expect(last_response.body.downcase).to include("url requests")
       end
     end
   end
