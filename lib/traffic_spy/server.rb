@@ -138,7 +138,7 @@ module TrafficSpy
 
     post "/sources/:identifier/campaigns" do
       identifier = params[:identifier]
-      hash = {"campaignName" => params["campaignName"], 
+      hash = {"campaignName" => params["campaignName"],
               "eventNames" => params["eventNames"]}
       campaign = Campaign.new(identifier, hash)
 
@@ -153,12 +153,13 @@ module TrafficSpy
         status 200
         "{\"identifier\":\"jumpstartlab\"}"
       end
-      #Example: curl -i -d 'campaignName=socialSignup&eventNames[]=addedSocialThroughPromptA&eventNames[]=addedSocialThroughPromptB'  http://localhost:9393/sources/IDENTIFIER/campaigns
     end
 
     get "/sources/:identifier/campaigns" do
       @identifier = params[:identifier]
-      if Client.find_by_identifier(@identifier).count == 0 || Campaign.find_all_by_identifier(@identifier).count == 0
+      client_count = Client.data.where(identifier: @identifier).to_a.count
+      campaign_count = Campaign.find_all_by_identifier(@identifier).count
+      if client_count == 0 || campaign_count == 0
         erb :error
       else
         @campaigns = Campaign.find_all_by_identifier(@identifier)
@@ -169,8 +170,9 @@ module TrafficSpy
     get "/sources/:identifier/campaigns/:campaignname" do
       @identifier = params[:identifier]
       @name = params[:campaignname]
+      client_count = Client.data.where(identifier: @identifier).count
 
-      unless Campaign.exists?(@name) && Client.data.where(identifier: @identifier).count > 0
+      unless Campaign.exists?(@name) && client_count > 0
          erb :error
       else
         @events = Campaign.campaign_event_sorter(@name)
