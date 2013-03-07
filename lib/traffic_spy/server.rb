@@ -130,5 +130,30 @@ module TrafficSpy
       end
     end
 
+
+
+
+
+
+
+    post "/sources/:identifier/campaigns" do
+      identifier = params[:identifier]
+      hash = {"campaignName" => params["campaignName"], 
+              "eventNames" => params["eventNames"]}
+      campaign = Campaign.new(identifier, hash)
+      if campaign.missing?
+        status 400
+        "{\"400 Bad Request\":\"params missing\"}"
+      elsif Campaign.exists?(params['campaignName'])
+        status 403
+        "{\"403 Forbidden\":\"campaign name exists\"}"
+      else
+        campaign.register
+        status 200
+        "{\"identifier\":\"jumpstartlab\"}"
+      end
+      # curl -i -d 'campaignName=socialSignup&eventNames[]=addedSocialThroughPromptA&eventNames[]=addedSocialThroughPromptB'  http://localhost:9393/sources/IDENTIFIER/campaigns
+    end
+
   end
 end

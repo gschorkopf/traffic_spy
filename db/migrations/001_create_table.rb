@@ -43,7 +43,3 @@ Sequel.migration do
     end
   end
 end
-
-# TODO: 
-# analytics class?
-# look into/use group_and_count method in sorters

@@ -8,11 +8,15 @@ describe TrafficSpy::Campaign do
 
   before do
     data.before
-    hash = {'campaignName' => 'socialSignup',
+    @hash = {'campaignName' => 'socialSignup',
       'eventNames' =>
       ['registrationStep1', 'registrationStep2',
       'registrationStep3', 'registrationStep4']}
-    @campaign = app.new('jumpstartlab', hash)
+    @campaign = app.new('jumpstartlab', @hash)
+    @bad_hash = {'campaignName' => '',
+      'eventNames' =>
+      ['registrationStep1', 'registrationStep2',
+      'registrationStep3', 'registrationStep4']}
   end
 
   after do
@@ -24,6 +28,16 @@ describe TrafficSpy::Campaign do
       expect(@campaign.name).to eq 'socialSignup'
       expect(@campaign.identifier).to eq 'jumpstartlab'
       expect(@campaign.event_names[1]).to eq 'registrationStep2'
+    end
+  end
+
+  describe "#missing?" do
+    it "returns true if parameters are missing" do
+      expect(app.new('jumpstartlab', @bad_hash).missing?).to be true
+    end
+
+    it "returns false if parameters are present" do
+      expect(@campaign.missing?).to be false
     end
   end
 
