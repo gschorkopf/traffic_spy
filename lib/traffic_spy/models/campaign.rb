@@ -26,11 +26,11 @@ module TrafficSpy
     end
 
     def register
+      event_ids = Event.loop_register(event_names)
       id = Campaign.data.insert(name: name,
                                 identifier: identifier)
 
-      CampaignEvent.loop_register(identifier, id,
-        Event.loop_register(event_names))
+      CampaignEvent.loop_register(identifier, id, event_ids)
     end
 
     def self.data
@@ -38,16 +38,16 @@ module TrafficSpy
     end
 
     def self.campaign_event_sorter(name)
-      id = Campaign.find_by_name(name)[:id]
+      id = Campaign.find_by_name(name)[:id].inspect
       ces = CampaignEvent.find_all_by_campaign_id(id)
-
-      ces_hash = Hash.new(0)
-      ces.collect {|ces| ces[:event_id]}.each do |id|
-        ces_hash[Event.find_by_id(id)] += 1
+      hash = Hash.new(0)
+      ces.collect {|ces| ces[:event_id]}.each do |event_id|
+        Payload.find_all_by_event_id(event_id).to_a.each do |payload|
+          hash[Event.find_by_id(payload[:event_id])] += 1
+        end
       end
-      ces_hash.sort_by {|ces, hits| hits}.reverse
+      hash
     end
-
 
   end
 end

@@ -16,14 +16,11 @@ module TrafficSpy
       elsif Client.exists?(client)
         status 403
         "{ \"403 Forbidden\":\"identifier already exists\" }"
-      else client.save
-        status 200
-        "{ \"identifier\":\"jumpstartlab\", \"rootUrl\":\"http://jumpstartlab.com\" }"
+      else
+        client.save
+        halt 200, "identifier: #{params["identifier"]}, "+
+                  "rooturl: #{params["rootUrl"]}"
       end
-
-      # Entry looks like:
-      # curl -i -d 'identifier=jumpstartlab&rootUrl=http://jumpstartlab.com'  http://localhost:9393/sources
-
     end
 
     post '/sources/:identifier/data' do
@@ -46,11 +43,12 @@ module TrafficSpy
       @source = Client.data.where(identifier: @identifier).to_a.first
 
       if @source.nil?
-        erb :error_404
         status 404
+        erb :error_404
       else
-        client_id = Client.data.where(identifier: params[:identifier]).to_a.first[:id]
-        @rooturl = Client.data.where(identifier: params[:identifier]).to_a.first[:rooturl]
+        client = Client.data.where(identifier: params[:identifier])
+        client_id = client.to_a.first[:id]
+        @rooturl = client.to_a.first[:rooturl]
         payloads_to_use = Payload.find_all_by_client_id(client_id)
         @urls = Payload.url_sorter(payloads_to_use)
         @paths = @urls.collect do |url|
@@ -68,38 +66,38 @@ module TrafficSpy
     end
 
     get "/sources/:identifier/urls/*" do
-      # Added splat.  Might explode!!
       @identifier = params[:identifier]
-      payloads = Payload.find_all_by_path(params[:splat]).to_a
+      @path = "/" + params[:splat].first.to_s
+
+      payloads = Payload.find_all_by_path(@path).to_a.first
+
       @source = Client.find_by_identifier(params[:identifier])
 
       if @source.nil? || payloads.nil?
-        erb :error
         status 404
+        erb :error
       else
-        path = "/#{@relative_path}"
-        payloads_to_use = Payload.find_all_by_path(path)
+        payloads_to_use = Payload.find_all_by_path(@path)
         @response_times = Payload.response_times_for_path(payloads_to_use)
-
         erb :url_stats
       end
     end
 
     get "/sources/:identifier/events" do
       @identifier = params[:identifier]
-      assoc_client = Client.find_by_identifier(@identifier).first
-      if assoc_client.count == 0
+      @source = Client.find_by_identifier(params[:identifier])
+      assoc_client = Client.find_by_identifier(@identifier)
+
+      if assoc_client.nil? || @source.nil?
         erb :error
       else
-        client_id =  assoc_client.last
-        events_to_use = Event.find_all_by_client_id(client_id)
-
+        client_id = assoc_client[:id]
+        events_to_use = Payload.find_all_by_client_id(client_id).to_a
         if events_to_use.to_a.count == 0
           "{\"message\":\"No events have been defined.\"}"
           erb :error
         else
           @events = Event.most_events_sorter(events_to_use)
-
           erb :app_events_index
         end
       end
@@ -107,16 +105,12 @@ module TrafficSpy
 
     get "/sources/:identifier/events/:name" do
       @identifier = params[:identifier]
-      # raise @identifier.inspect
-
       @source = Client.data.where(identifier: @identifier).to_a
-      # raise @source.inspect
-
       @name = params[:name]
       @event = Event.data.where(name: @name).to_a
 
       if @event.count == 0
-        "{\"message\":\"No events have been defined.\"}"
+        erb :error_with_event_index
       else
         @hourly_events = Event.hourly_events_sorter(@event.first[:id])
         erb :event_stats

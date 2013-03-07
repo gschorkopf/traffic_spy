@@ -57,7 +57,7 @@ describe TrafficSpy::Event do
 
   describe ".most_events_sorter" do
     it "returns list of events from most received to least for payloads" do
-      events = app.find_all_by_client_id(1)
+      events = TrafficSpy::Payload.find_all_by_client_id(1)
       expect(app.most_events_sorter(events).first.first).to eq 'socialLogin'
     end
   end

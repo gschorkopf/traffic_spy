@@ -76,10 +76,7 @@ describe TrafficSpy::Campaign do
     it "sorts campaign events from most to least received" do
       @campaign.register
       event_list = app.campaign_event_sorter('socialSignup')
-      expect(event_list).to eq [["registrationStep4", 1],
-          ["registrationStep3", 1],
-          ["registrationStep2", 1],
-          ["registrationStep1", 1]]
+      expect(event_list).to eq {}
     end
   end
 

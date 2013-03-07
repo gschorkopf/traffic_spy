@@ -1,8 +1,9 @@
 <h3>URL Specific Data</h3>
+  <h4>Response times for "<%= params[:splat].first %>" path:</h4>
     <ul>
-        <li>
           <% @response_times.each do |time| %>
-             <%= time %>
+          <li>
+             <%= time %> ms
+          </li>
           <% end %>
-        </li>
     </ul>

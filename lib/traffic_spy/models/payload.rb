@@ -55,7 +55,6 @@ module TrafficSpy
 
     def self.find_all_by_event_id(event_id)
       data.where(event_id: event_id)
-      #untested method
     end
 
     def self.url_sorter(payloads)

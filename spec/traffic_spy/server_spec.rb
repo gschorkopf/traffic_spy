@@ -136,20 +136,6 @@ describe TrafficSpy::Server do
 
   end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     describe "post /sources/:identifier/campaigns" do
       context "given the parameters are missing" do
         it "returns an error" do
@@ -233,7 +219,7 @@ describe TrafficSpy::Server do
       context "event name does not exist for identifier" do
         it "returns an error message" do
           get "/sources/jumpstartlab/events/mouseClick"
-          expect(last_response.body.downcase).to include("no events have been defined")
+          expect(last_response.body.downcase).to include("messed things up")
         end
       end
 

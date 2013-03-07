@@ -15,7 +15,6 @@ module TrafficSpy
     end
 
     def self.find_by_id(id)
-      #untested
       Event.data.where(id: id).to_a[0][:name]
     end
 
@@ -33,7 +32,6 @@ module TrafficSpy
     end
 
     def self.loop_register(events)
-      #untested method
       event_ids = []
       events.each do |event|
         id = Event.find_or_create(event)
@@ -55,10 +53,12 @@ module TrafficSpy
 
     def self.most_events_sorter(payloads)
       event_hash = Hash.new(0)
-      payloads.collect {|event| event[:name]}.each do |name|
-       event_hash[name] += 1
+      payloads.collect {|payload| payload[:event_id]}.each do |id|
+        unless Event.find_by_id(id) == ''
+          event_hash[Event.find_by_id(id)] += 1
+        end
       end
-      event_hash.sort_by {|name, hits| hits}.reverse
+      event_hash.sort_by {|names, hits| hits}.reverse
     end
 
     def self.hourly_events_sorter(event_id)
