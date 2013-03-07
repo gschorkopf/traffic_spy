@@ -12,15 +12,13 @@ module TrafficSpy
 
       if client.missing?
         status 400
-        "{\"400 Bad Request\":\"missing identifer or rootUrl\"}"
+        "{ \"400 Bad Request\":\"missing identifer or rootUrl\" }"
       elsif Client.exists?(client)
         status 403
-        "{\"403 Forbidden\":\"identifier already exists\"}"
-      else
-        # Client.create(params[:identifier] params[:rooturl])
-        client.save
+        "{ \"403 Forbidden\":\"identifier already exists\" }"
+      else client.save
         status 200
-        "{\"identifier\":\"jumpstartlab\"}"
+        "{ \"identifier\":\"jumpstartlab\", \"rootUrl\":\"http://jumpstartlab.com\" }"
       end
 
       # Entry looks like:
@@ -29,29 +27,23 @@ module TrafficSpy
     end
 
     post '/sources/:identifier/data' do
-
-      hash = JSON.parse(params["payload"])
-      client_id = Client.data.where(identifier: params[:identifier]).to_a.first[:id]
-      # Client.find_by_identifier
-      payload = Payload.new(hash, client_id)
-
-      if hash == {} || hash == "" || hash == []
-        status 400
-        "{\"400 Bad Request\":\"payload missing\"}"
-      elsif Payload.exists?(payload)
+      if params["payload"] == nil
+        halt 400, "missing payload"
+      elsif Payload.exists? JSON.parse(params["payload"])
         status 403
-        "{\"403 Forbidden\":\"payload already received\"}"
       else
+        hash = JSON.parse(params["payload"])
+        client = Client.find_by_identifier(params[:identifier])
+        client_id = client[:id]
+        payload = Payload.new(hash, client_id)
         payload.commit
         status 200
-        "{\"200 Success\":\"unique payload confirmed\"}"
       end
     end
 
     get '/sources/:identifier' do
       @identifier = params[:identifier]
       @source = Client.data.where(identifier: @identifier).to_a.first[:identifier]
-      # raise @source.inspect
 
       if @source == ""
         erb :error_400
@@ -70,7 +62,6 @@ module TrafficSpy
         @response_times = Payload.avg_response_times(payloads_to_use)
         @url_spec_metrics = Payload.url_sorter(payloads_to_use).to_a
         erb :app_details_index
-
       end
 
     end

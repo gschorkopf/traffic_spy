@@ -23,12 +23,8 @@ module TrafficSpy
     end
 
     def self.exists?(client)
-      Client.data.where(identifier: client.identifier).count > 0
+      data.where(identifier: client.identifier).count > 0
     end
-
-    # def valid?
-      # identifier && rooturl
-    # end
 
     def self.data
       DB.from(:identifiers)

@@ -21,7 +21,7 @@ module TrafficSpy
     end
 
     def self.exists?(payload)
-      Payload.data.where(url: payload.url).where(requested_at: payload.requested_at).count > 0
+      Payload.data.where(url: payload["url"], requested_at: payload["requestedAt"]).count > 0
     end
 
     def self.data
