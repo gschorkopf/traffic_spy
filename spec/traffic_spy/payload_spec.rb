@@ -14,12 +14,14 @@ describe TrafficSpy::Payload do
     @p1 = data.payload_one
     @p2 = data.payload_two
     @p3 = data.payload_three
+    @hash = data.hash_one
+    @empty_hash = {}
     @empty_payload = app.new({}, 1)
   end
 
   after do
     data.after
-    @p1, @p2, @p3 = nil
+    @p1, @p2, @p3, @hash = nil
     @empty_payload, @client = nil
   end
 
@@ -60,13 +62,13 @@ describe TrafficSpy::Payload do
   end
 
   describe ".exists?" do
-    it "returns true if payload exists in :payloads" do
+    it "returns true if hash exists in :payloads" do
       @p1.commit
-      expect(app.exists?(@p1)).to eq true
+      expect(app.exists?(@hash)).to eq true
     end
 
-    it "return false if the payload does not exist in :payloads" do
-      expect(app.exists?(@empty_payload)).to eq false
+    it "return false if the hash does not exist in :payloads" do
+      expect(app.exists?(@empty_hash)).to eq false
     end
   end
 
