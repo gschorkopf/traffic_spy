@@ -12,16 +12,18 @@ describe TrafficSpy::Server do
     describe "application registration at /sources" do
       context "given valid and unique parameters" do
         it "registers the application" do
-          post "/sources", {"identifier" => 'google', "rootUrl" => 'http://google.com'}
+          post "/sources", {"identifier" => 'google',
+            "rootUrl" => 'http://google.com'}
           expect(last_response).to be_ok
-          expect(last_response.body.downcase).to include("identifier") && include("rooturl")
+          expect(last_response.body.downcase).to include("identifier")
         end
       end
     end
 
     context "given parameters for an already existing application" do
       it "returns an error" do
-        2.times { post "/sources", {"identifier" => 'google', "rootUrl" => 'http://google.com'} }
+        2.times { post "/sources", {"identifier" => 'google',
+          "rootUrl" => 'http://google.com'} }
         expect(last_response.status).to eq 403
       end
     end
@@ -45,18 +47,19 @@ describe TrafficSpy::Server do
 
     context "with a payload" do
       let(:payload) do
-          {"url"              => "http://jumpstartlab.com/blog",
-          "requestedAt"      => "2013-02-16 21:38:28 -0700",
-          "respondedIn"      => 37,
-          "referredBy"       => "http://jumpstartlab.com",
-          "requestType"      => "GET",
-          "parameters"       => [],
-          "eventName"        => "socialLogin",
-          "userAgent"        => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2)"+
-          " AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17",
-          "resolutionWidth"  => "1920",
-          "resolutionHeight" => "1280",
-          "ip"               => "63.29.38.211"}.to_json
+          {"url"            => "http://jumpstartlab.com/blog",
+          "requestedAt"     => "2013-02-16 21:38:28 -0700",
+          "respondedIn"     => 37,
+          "referredBy"      => "http://jumpstartlab.com",
+          "requestType"     => "GET",
+          "parameters"      => [],
+          "eventName"       => "socialLogin",
+          "userAgent"       => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2)"+
+          " AppleWebKit/537.17 (KHTML, like Gecko) "+
+          "Chrome/24.0.1309.0 Safari/537.17",
+          "resolutionWidth" => "1920",
+          "resolutionHeight"=> "1280",
+          "ip"              => "63.29.38.211"}.to_json
       end
 
       before do
@@ -109,18 +112,19 @@ describe TrafficSpy::Server do
 
     context "when the params exist" do
       let(:payload) do
-          {"url"              => "http://jumpstartlab.com/blog/banana",
-          "requestedAt"      => "2013-02-16 21:38:28 -0700",
-          "respondedIn"      => 37,
-          "referredBy"       => "http://jumpstartlab.com",
-          "requestType"      => "GET",
-          "parameters"       => [],
-          "eventName"        => "socialLogin",
-          "userAgent"        => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2)"+
-          " AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17",
-          "resolutionWidth"  => "1920",
-          "resolutionHeight" => "1280",
-          "ip"               => "63.29.38.211"}.to_json
+          {"url"          => "http://jumpstartlab.com/blog/banana",
+          "requestedAt"   => "2013-02-16 21:38:28 -0700",
+          "respondedIn"   => 37,
+          "referredBy"    => "http://jumpstartlab.com",
+          "requestType"   => "GET",
+          "parameters"    => [],
+          "eventName"     => "socialLogin",
+          "userAgent"     => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2)"+
+          " AppleWebKit/537.17 (KHTML, like Gecko) "+
+          "Chrome/24.0.1309.0 Safari/537.17",
+          "resolutionWidth"=> "1920",
+          "resolutionHeight"=> "1280",
+          "ip"             => "63.29.38.211"}.to_json
       end
 
       it "gives us all of the information about that url" do
@@ -139,9 +143,10 @@ describe TrafficSpy::Server do
     describe "post /sources/:identifier/campaigns" do
       context "given the parameters are missing" do
         it "returns an error" do
-          post "/sources/jumpstartlab/campaigns", {"campaignName" => 'socialSignup'}
+          post "/sources/jumpstartlab/campaigns",
+                {"campaignName" => 'socialSignup'}
           expect(last_response.status).to eq 400
-          expect(last_response.body.downcase).to include("bad request") && include("params")
+          expect(last_response.body.downcase).to include("bad request")
         end
       end
 
@@ -151,29 +156,30 @@ describe TrafficSpy::Server do
             'eventNames' => ['step1', 'step2', 'step3', 'step4']}
           campaign = TrafficSpy::Campaign.new('jumpstartlab', hash)
           campaign.register
-          post "/sources/jumpstartlab/campaigns", {"campaignName" => 'socialSignup',
+          post "/sources/jumpstartlab/campaigns",
+            {"campaignName" => 'socialSignup',
             'eventNames' => ['step1', 'step2', 'step3', 'step4']}
           expect(last_response.status).to eq 403
-          expect(last_response.body.downcase).to include('forbidden') && include('exists')
+          expect(last_response.body.downcase).to include('forbidden')
         end
       end
 
       context "parameters aren't missing and don't already exist" do
         it "returns the AOK" do
-          post "/sources/jumpstartlab/campaigns", {"campaignName" => 'socialSignup',
+          post "/sources/jumpstartlab/campaigns",
+            {"campaignName" => 'socialSignup',
             'eventNames' => ['step1', 'step2', 'step3', 'step4']}
           expect(last_response.status).to eq 200
-          expect(last_response.body.downcase).to include('campaign') && include('registered')
+          expect(last_response.body.downcase).to include('registered')
         end
       end
-      
     end
 
     describe "get /sources/:identifier/campaigns" do
       context "if there are no campaigns for identifier" do
         it "returns an error screen" do
           get "/sources/jumpstartlab/campaigns"
-          expect(last_response.body.downcase).to include("has not been requested")
+          expect(last_response.body.downcase).to include("not been requested")
         end
       end
 
@@ -181,7 +187,8 @@ describe TrafficSpy::Server do
         it "returns a page of campaign info" do
           post "/sources", {"identifier" => 'jumpstartlab',
             "rootUrl" => 'http://jumpstartlab.com'}
-          post "/sources/jumpstartlab/campaigns", {"campaignName" => 'socialSignup',
+          post "/sources/jumpstartlab/campaigns",
+            {"campaignName" => 'socialSignup',
             'eventNames' => ['step1', 'step2', 'step3', 'step4']}
           get "/sources/jumpstartlab/campaigns"
           expect(last_response.body.downcase).to include("campaigns available")
@@ -193,17 +200,18 @@ describe TrafficSpy::Server do
       context "if campaign or identifier does not exist" do
         it "returns an error page" do
           get "/sources/jumpstartlab/campaigns/fakecampaign"
-          expect(last_response.body.downcase).to include("has not been requested")
+          expect(last_response.body.downcase).to include("not been requested")
         end
       end
       context "if both campaign and identifier does exist" do
         it "direct to event data by campaign" do
           post "/sources", {"identifier" => 'jumpstartlab',
             "rootUrl" => 'http://jumpstartlab.com'}
-          post "/sources/jumpstartlab/campaigns", {"campaignName" => 'socialSignup',
+          post "/sources/jumpstartlab/campaigns",
+            {"campaignName" => 'socialSignup',
             'eventNames' => ['step1', 'step2', 'step3', 'step4']}
           get "/sources/jumpstartlab/campaigns/socialSignup"
-          expect(last_response.body.downcase).to include("campaign specific data")
+          expect(last_response.body).to include("Campaign specific data")
         end
       end
     end
@@ -225,18 +233,19 @@ describe TrafficSpy::Server do
 
       context "event name does exist for identifier" do
         let(:payload) do
-          {"url"              => "http://jumpstartlab.com/blog",
-          "requestedAt"      => "2013-02-16 21:38:28 -0700",
-          "respondedIn"      => 37,
-          "referredBy"       => "http://jumpstartlab.com",
-          "requestType"      => "GET",
-          "parameters"       => [],
-          "eventName"        => "socialLogin",
-          "userAgent"        => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2)"+
-          " AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17",
-          "resolutionWidth"  => "1920",
-          "resolutionHeight" => "1280",
-          "ip"               => "63.29.38.211"}.to_json
+          {"url"           => "http://jumpstartlab.com/blog",
+          "requestedAt"    => "2013-02-16 21:38:28 -0700",
+          "respondedIn"    => 37,
+          "referredBy"     => "http://jumpstartlab.com",
+          "requestType"    => "GET",
+          "parameters"     => [],
+          "eventName"      => "socialLogin",
+          "userAgent"      => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2)"+
+          " AppleWebKit/537.17 (KHTML, like Gecko) "+
+          "Chrome/24.0.1309.0 Safari/537.17",
+          "resolutionWidth"=> "1920",
+          "resolutionHeight"=> "1280",
+          "ip"             => "63.29.38.211"}.to_json
         end
         it "returns the event page with event data" do
           post "/sources", {"identifier" => 'jumpstartlab',
