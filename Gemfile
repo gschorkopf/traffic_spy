@@ -21,8 +21,12 @@ end
 
 group :evaluations do
   # THIS SPACE RESERVED FOR EVALUATIONS
+
 end
 
 group :development, :test do
   gem 'rack-test'
+  gem 'cane'
+  gem 'reek'
+  gem 'rake'
 end
