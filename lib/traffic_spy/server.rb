@@ -142,7 +142,7 @@ module TrafficSpy
       else
         campaign.register
         status 200
-        "{\"identifier\":\"jumpstartlab\"}"
+        "{\"campaign\":\"registered\"}"
       end
     end
 

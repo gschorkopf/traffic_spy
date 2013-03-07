@@ -84,4 +84,92 @@ describe TrafficSpy::Server do
   end
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+    describe "post /sources/:identifier/campaigns" do
+      context "given the parameters are missing" do
+        it "returns an error" do
+          post "/sources/jumpstartlab/campaigns", {"campaignName" => 'socialSignup'}
+          expect(last_response.status).to eq 400
+          expect(last_response.body.downcase).to include("bad request") && include("params")
+        end
+      end
+
+      context "given the parameters already exist" do
+        it "returns an error" do
+          hash = {"campaignName" => 'socialSignup',
+            'eventNames' => ['step1', 'step2', 'step3', 'step4']}
+          campaign = TrafficSpy::Campaign.new('jumpstartlab', hash)
+          campaign.register
+          post "/sources/jumpstartlab/campaigns", {"campaignName" => 'socialSignup',
+            'eventNames' => ['step1', 'step2', 'step3', 'step4']}
+          expect(last_response.status).to eq 403
+          expect(last_response.body.downcase).to include('forbidden') && include('exists')
+        end
+      end
+
+      context "parameters aren't missing and don't already exist" do
+        it "returns the AOK" do
+          post "/sources/jumpstartlab/campaigns", {"campaignName" => 'socialSignup',
+            'eventNames' => ['step1', 'step2', 'step3', 'step4']}
+          expect(last_response.status).to eq 200
+          expect(last_response.body.downcase).to include('campaign') && include('registered')
+        end
+      end
+      
+    end
+
+    describe "get /sources/:identifier/campaigns" do
+      context "if there are no campaigns for identifier" do
+        it "returns an error screen" do
+          get "/sources/jumpstartlab/campaigns"
+          expect(last_response.body.downcase).to include("has not been requested")
+        end
+      end
+
+      context "if there are both a campaign and identifier valid" do
+        it "returns a page of campaign info" do
+          post "/sources", {"identifier" => 'jumpstartlab',
+            "rootUrl" => 'http://jumpstartlab.com'}
+          post "/sources/jumpstartlab/campaigns", {"campaignName" => 'socialSignup',
+            'eventNames' => ['step1', 'step2', 'step3', 'step4']}
+          get "/sources/jumpstartlab/campaigns"
+          expect(last_response.body.downcase).to include("campaigns available")
+        end
+      end
+    end
+
+    describe "get /sources/:identifier/campaigns/:campaignname" do
+      context "if campaign or identifier does not exist" do
+        it "returns an error page" do
+          get "/sources/jumpstartlab/campaigns/fakecampaign"
+          expect(last_response.body.downcase).to include("has not been requested")
+        end
+      end
+      context "if both campaign and identifier does exist" do
+        it "direct to event data by campaign" do
+          post "/sources", {"identifier" => 'jumpstartlab',
+            "rootUrl" => 'http://jumpstartlab.com'}
+          post "/sources/jumpstartlab/campaigns", {"campaignName" => 'socialSignup',
+            'eventNames' => ['step1', 'step2', 'step3', 'step4']}
+          get "/sources/jumpstartlab/campaigns/socialSignup"
+          expect(last_response.body.downcase).to include("campaign specific data")
+        end
+      end
+    end
+
+
+
+
 end
